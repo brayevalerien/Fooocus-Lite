@@ -47,6 +47,7 @@ def log(img, metadata, metadata_parser: MetadataParser | None = None, output_for
     if args_manager.args.disable_image_log:
         return local_temp_filename
 
+    # html_name = os.path.join("./log/private_logs", 'log.html')
     html_name = os.path.join(os.path.dirname(local_temp_filename), 'log.html')
 
     css_styles = (

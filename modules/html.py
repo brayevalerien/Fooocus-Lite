@@ -133,7 +133,6 @@ progress::after {
 '''
 progress_html = '''
 <div class="loader-container">
-  <div class="loader"></div>
   <div class="progress-container">
     <progress value="*number*" max="100"></progress>
   </div>

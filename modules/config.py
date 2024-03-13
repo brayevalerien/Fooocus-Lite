@@ -292,6 +292,7 @@ default_styles = get_config_item_or_set_default(
     default_value=[
         "Fooocus V2",
         "Fooocus Enhance",
+        "Fooocus Negative",
         "Fooocus Sharp"
     ],
     validator=lambda x: isinstance(x, list) and all(y in modules.sdxl_styles.legal_style_names for y in x)
@@ -310,17 +311,17 @@ default_prompt = get_config_item_or_set_default(
 )
 default_performance = get_config_item_or_set_default(
     key='default_performance',
-    default_value=Performance.SPEED.value,
+    default_value=Performance.QUALITY.value,
     validator=lambda x: x in Performance.list()
 )
 default_advanced_checkbox = get_config_item_or_set_default(
     key='default_advanced_checkbox',
-    default_value=False,
+    default_value=True,
     validator=lambda x: isinstance(x, bool)
 )
 default_max_image_number = get_config_item_or_set_default(
     key='default_max_image_number',
-    default_value=32,
+    default_value=128,
     validator=lambda x: isinstance(x, int) and x >= 1
 )
 default_output_format = get_config_item_or_set_default(
@@ -330,7 +331,7 @@ default_output_format = get_config_item_or_set_default(
 )
 default_image_number = get_config_item_or_set_default(
     key='default_image_number',
-    default_value=2,
+    default_value=1,
     validator=lambda x: isinstance(x, int) and 1 <= x <= default_max_image_number
 )
 checkpoint_downloads = get_config_item_or_set_default(
@@ -350,18 +351,21 @@ embeddings_downloads = get_config_item_or_set_default(
 )
 available_aspect_ratios = get_config_item_or_set_default(
     key='available_aspect_ratios',
+    # default_value=[
+    #     '704*1408', '704*1344', '768*1344', '768*1280', '832*1216', '832*1152',
+    #     '896*1152', '896*1088', '960*1088', '960*1024', '1024*1024', '1024*960',
+    #     '1088*960', '1088*896', '1152*896', '1152*832', '1216*832', '1280*768',
+    #     '1344*768', '1344*704', '1408*704', '1472*704', '1536*640', '1600*640',
+    #     '1664*576', '1728*576'
+    # ],
     default_value=[
-        '704*1408', '704*1344', '768*1344', '768*1280', '832*1216', '832*1152',
-        '896*1152', '896*1088', '960*1088', '960*1024', '1024*1024', '1024*960',
-        '1088*960', '1088*896', '1152*896', '1152*832', '1216*832', '1280*768',
-        '1344*768', '1344*704', '1408*704', '1472*704', '1536*640', '1600*640',
-        '1664*576', '1728*576'
+        '1024*1024'
     ],
     validator=lambda x: isinstance(x, list) and all('*' in v for v in x) and len(x) > 1
 )
 default_aspect_ratio = get_config_item_or_set_default(
     key='default_aspect_ratio',
-    default_value='1152*896' if '1152*896' in available_aspect_ratios else available_aspect_ratios[0],
+    default_value='1024*1024' if '1024*1024' in available_aspect_ratios else available_aspect_ratios[0],
     validator=lambda x: x in available_aspect_ratios
 )
 default_inpaint_engine_version = get_config_item_or_set_default(
@@ -409,7 +413,8 @@ metadata_created_by = get_config_item_or_set_default(
 
 example_inpaint_prompts = [[x] for x in example_inpaint_prompts]
 
-config_dict["default_loras"] = default_loras = default_loras[:default_max_lora_number] + [['None', 1.0] for _ in range(default_max_lora_number - len(default_loras))]
+# config_dict["default_loras"] = default_loras = default_loras[:default_max_lora_number] + [['None', 1.0] for _ in range(default_max_lora_number - len(default_loras))]
+config_dict["default_loras"] = default_loras = default_loras[:default_max_lora_number] + [['SDXL_FILM_PHOTOGRAPHY_STYLE_BetaV0.4.safetensors', .25] ]
 
 possible_preset_keys = [
     "default_model",

@@ -56,7 +56,7 @@ def worker():
 
     try:
         async_gradio_app = shared.gradio_root
-        flag = f'''App started successful. Use the app with {str(async_gradio_app.local_url)} or {str(async_gradio_app.server_name)}:{str(async_gradio_app.server_port)}'''
+        flag = f'''\nFooocus Lite started successfully at: {str(async_gradio_app.local_url)}'''
         if async_gradio_app.share:
             flag += f''' or {async_gradio_app.share_url}'''
         print(flag)
@@ -141,7 +141,7 @@ def worker():
         args.reverse()
 
         prompt = args.pop()
-        negative_prompt = args.pop()
+        negative_prompt = args.pop() + modules.config.default_prompt_negative
         style_selections = args.pop()
         performance_selection = Performance(args.pop())
         aspect_ratios_selection = args.pop()

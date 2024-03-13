@@ -34,7 +34,7 @@ args_parser.parser.add_argument("--always-download-new-model", action='store_tru
 args_parser.parser.set_defaults(
     disable_cuda_malloc=True,
     in_browser=True,
-    port=None
+    port=5429
 )
 
 args_parser.args = args_parser.parser.parse_args()

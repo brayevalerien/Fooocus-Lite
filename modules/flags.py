@@ -12,7 +12,8 @@ uov_list = [
     disabled, subtle_variation, strong_variation, upscale_15, upscale_2, upscale_fast
 ]
 
-CIVITAI_NO_KARRAS = ["euler", "euler_ancestral", "heun", "dpm_fast", "dpm_adaptive", "ddim", "uni_pc"]
+CIVITAI_NO_KARRAS = ["euler", "euler_ancestral", "heun",
+                     "dpm_fast", "dpm_adaptive", "ddim", "uni_pc"]
 
 # fooocus: a1111 (Civitai)
 KSAMPLER = {
@@ -47,7 +48,8 @@ SAMPLERS = KSAMPLER | SAMPLER_EXTRA
 
 KSAMPLER_NAMES = list(KSAMPLER.keys())
 
-SCHEDULER_NAMES = ["normal", "karras", "exponential", "sgm_uniform", "simple", "ddim_uniform", "lcm", "turbo"]
+SCHEDULER_NAMES = ["normal", "karras", "exponential",
+                   "sgm_uniform", "simple", "ddim_uniform", "lcm", "turbo"]
 SAMPLER_NAMES = KSAMPLER_NAMES + list(SAMPLER_EXTRA.keys())
 
 sampler_list = SAMPLER_NAMES
@@ -55,25 +57,29 @@ scheduler_list = SCHEDULER_NAMES
 
 refiner_swap_method = 'joint'
 
-cn_ip = "ImagePrompt"
-cn_ip_face = "FaceSwap"
-cn_canny = "PyraCanny"
-cn_cpds = "CPDS"
+cn_ip = "Atmosphere"
+cn_ip_face = "Face"
+cn_canny = "Shapes"
+cn_cpds = "Depth"
 
 ip_list = [cn_ip, cn_canny, cn_cpds, cn_ip_face]
-default_ip = cn_ip
+default_ip = cn_canny
 
 default_parameters = {
-    cn_ip: (0.5, 0.6), cn_ip_face: (0.9, 0.75), cn_canny: (0.5, 1.0), cn_cpds: (0.5, 1.0)
+    cn_ip: (0.25, 0.6),
+    cn_ip_face: (0.9, 0.75),
+    cn_canny: (0.9, 1.0),
+    cn_cpds: (0.75, 1.0)
 }  # stop, weight
 
 output_formats = ['png', 'jpg', 'webp']
 
 inpaint_engine_versions = ['None', 'v1', 'v2.5', 'v2.6']
-inpaint_option_default = 'Inpaint or Outpaint (default)'
+inpaint_option_default = 'Inpaint or Outpaint'
 inpaint_option_detail = 'Improve Detail (face, hand, eyes, etc.)'
-inpaint_option_modify = 'Modify Content (add objects, change background, etc.)'
-inpaint_options = [inpaint_option_default, inpaint_option_detail, inpaint_option_modify]
+inpaint_option_modify = 'Modify Content'
+inpaint_options = [inpaint_option_default,
+                   inpaint_option_detail, inpaint_option_modify]
 
 desc_type_photo = 'Photograph'
 desc_type_anime = 'Art/Anime'
@@ -89,27 +95,27 @@ metadata_scheme = [
     (f'{MetadataScheme.A1111.value} (plain text)', MetadataScheme.A1111.value),
 ]
 
-lora_count = 5
+lora_count = 3
 
-controlnet_image_count = 4
+controlnet_image_count = 2
 
 
 class Steps(IntEnum):
     QUALITY = 60
-    SPEED = 30
+    # SPEED = 30
     EXTREME_SPEED = 8
 
 
 class StepsUOV(IntEnum):
     QUALITY = 36
-    SPEED = 18
+    # SPEED = 18
     EXTREME_SPEED = 8
 
 
 class Performance(Enum):
-    QUALITY = 'Quality'
-    SPEED = 'Speed'
-    EXTREME_SPEED = 'Extreme Speed'
+    QUALITY = 'High'
+    # SPEED = 'Speed'
+    EXTREME_SPEED = 'Draft'
 
     @classmethod
     def list(cls) -> list:
