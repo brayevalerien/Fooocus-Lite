@@ -295,7 +295,7 @@ with shared.gradio_root:
             ip_advanced.change(lambda: None, queue=False,
                                show_progress=False, _js=down_js)
 
-            current_tab = gr.Textbox(value='uov', visible=False)
+            current_tab = gr.Textbox(value='ip', visible=False)
             uov_tab.select(lambda: 'uov', outputs=current_tab,
                            queue=False, _js=down_js, show_progress=False)
             inpaint_tab.select(lambda: 'inpaint', outputs=current_tab,
@@ -402,7 +402,6 @@ with shared.gradio_root:
                                                         queue=False,
                                                         show_progress=False).then(
                         lambda: None, _js='()=>{refresh_style_localization();}')
-
                 with gr.Tab(label='Model'):
                     with gr.Group():
                         with gr.Row():
@@ -642,26 +641,24 @@ with shared.gradio_root:
 
             if mode == modules.flags.inpaint_option_detail:
                 return [
-                    gr.update(visible=True), gr.update(
-                        visible=False, value=[]),
-                    gr.Dataset.update(
-                        visible=True),
+                    gr.update(visible=True),
+                    gr.update(visible=False, value=[]),
+                    gr.Dataset.update(visible=True, samples=modules.config.example_inpaint_prompts),
                     False, 'None', 0.5, 0.0
                 ]
 
             if mode == modules.flags.inpaint_option_modify:
                 return [
-                    gr.update(visible=True), gr.update(
-                        visible=False, value=[]),
-                    gr.Dataset.update(
-                        visible=False),
+                    gr.update(visible=True),
+                    gr.update(visible=False, value=[]),
+                    gr.Dataset.update(visible=False, samples=modules.config.example_inpaint_prompts),
                     True, modules.config.default_inpaint_engine_version, 1.0, 0.0
                 ]
 
             return [
-                gr.update(visible=False, value=''), gr.update(visible=True),
-                gr.Dataset.update(
-                    visible=False),
+                gr.update(visible=False, value=''),
+                gr.update(visible=True),
+                gr.Dataset.update(visible=False, samples=modules.config.example_inpaint_prompts),
                 False, modules.config.default_inpaint_engine_version, 1.0, 0.618
             ]
 
