@@ -40,6 +40,6 @@ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.o
 
 ## How to run
 Once Fooocus Lite has been installed, it can be launched by executing [`start.bat`](./start.bat) (in the root directory of Fooocus Lite).
-> Note that if it is the first time it is launched, the process might take some time depending on your Internet connection since it will download large SDXL models. Make sure you have at least 7Gb of disk space available.
+> When Fooocus Lite is launched for the first time, it will need to set up some things and download about 27Gb of SDXL models. So make sure you have some available disk space and take a coffee!
 
 After a few seconds, the Web UI should open in your default browser. If it is not the case, go to this URL: [http://127.0.0.1:5429](http://127.0.0.1:5429).
