@@ -66,10 +66,10 @@ ip_list = [cn_ip, cn_canny, cn_cpds, cn_ip_face]
 default_ip = cn_canny
 
 default_parameters = {
-    cn_ip: (0.25, 0.6),
+    cn_ip: (0.25, 1),
     cn_ip_face: (0.9, 0.75),
-    cn_canny: (0.9, 1.0),
-    cn_cpds: (0.75, 1.0)
+    cn_canny: (0.9, 1),
+    cn_cpds: (0.75, .9)
 }  # stop, weight
 
 output_formats = ['png', 'jpg', 'webp']
