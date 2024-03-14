@@ -38,8 +38,10 @@ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.o
 
 Finally, launch Fooocus Lite using the following command to initiate the software and download the required models.
 ```bash
-python entry_with_update.py
+python entry_with_update.py --preset realistic
 ```
+This final step might take some time depending on your Internet connection since it will download large SDXL models. Make sure you have at least 7Gb of disk space available.
+> The `--preset realistic` argument is important. It might work fine without it but it has not been tested at all and I cannot guarantee omitting it would not lead to issues.
 
 ## How to run
 After you have installed Fooocus Lite and ran it once, you can start the software by activating the Conda environment and running `entry_with_update.py` with the realistic preset:
