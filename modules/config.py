@@ -240,8 +240,8 @@ default_loras = get_config_item_or_set_default(
     key='default_loras',
     default_value=[
         [
-            "None",
-            1.0
+            "SDXL_FILM_PHOTOGRAPHY_STYLE_BetaV0.4.safetensors",
+            .25
         ],
         [
             "None",
@@ -413,8 +413,8 @@ metadata_created_by = get_config_item_or_set_default(
 
 example_inpaint_prompts = [[x] for x in example_inpaint_prompts]
 
-# config_dict["default_loras"] = default_loras = default_loras[:default_max_lora_number] + [['None', 1.0] for _ in range(default_max_lora_number - len(default_loras))]
-config_dict["default_loras"] = default_loras = default_loras[:default_max_lora_number] + [['SDXL_FILM_PHOTOGRAPHY_STYLE_BetaV0.4.safetensors', .25] ]
+config_dict["default_loras"] = default_loras = default_loras[:default_max_lora_number] + [['None', 1.0] for _ in range(default_max_lora_number - len(default_loras))]
+# config_dict["default_loras"] = default_loras = default_loras[:default_max_lora_number] + [['SDXL_FILM_PHOTOGRAPHY_STYLE_BetaV0.4.safetensors', .25] ]
 
 possible_preset_keys = [
     "default_model",
