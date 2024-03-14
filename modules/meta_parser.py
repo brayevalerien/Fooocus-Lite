@@ -7,7 +7,6 @@ from pathlib import Path
 import gradio as gr
 from PIL import Image
 
-import fooocus_version
 import modules.config
 import modules.sdxl_styles
 from modules.flags import MetadataScheme, Performance, Steps
@@ -567,7 +566,7 @@ def get_exif(metadata: str | None, metadata_scheme: str):
     # 0x9286 = UserComment
     exif[0x9286] = metadata
     # 0x0131 = Software
-    exif[0x0131] = 'Fooocus v' + fooocus_version.version
+    exif[0x0131] = 'Fooocus Life'
     # 0x927C = MakerNote
     exif[0x927C] = metadata_scheme
     return exif

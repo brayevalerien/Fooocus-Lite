@@ -42,5 +42,5 @@ import sys
 #     print('Update failed.')
 #     print(str(e))
 
-print('Launching Fooocus Lite.')
+# print('Launching Fooocus Lite.')
 from launch import *

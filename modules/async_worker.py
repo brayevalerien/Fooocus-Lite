@@ -39,7 +39,6 @@ def worker():
     import modules.constants as constants
     import extras.ip_adapter as ip_adapter
     import extras.face_crop
-    import fooocus_version
     import args_manager
 
     from modules.sdxl_styles import apply_style, apply_wildcards, fooocus_expansion, apply_arrays
@@ -872,7 +871,7 @@ def worker():
                                                  task['log_negative_prompt'], task['negative'],
                                                  steps, base_model_name, refiner_model_name, loras)
                     d.append(('Metadata Scheme', 'metadata_scheme', metadata_scheme.value if save_metadata_to_images else save_metadata_to_images))
-                    d.append(('Version', 'version', 'Fooocus v' + fooocus_version.version))
+                    d.append(('Version', 'version', 'Fooocus Lite'))
                     img_paths.append(log(x, d, metadata_parser, output_format))
 
                 yield_result(async_task, img_paths, do_not_show_finished_images=len(tasks) == 1 or disable_intermediate_results)
