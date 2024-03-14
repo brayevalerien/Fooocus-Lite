@@ -274,7 +274,7 @@ default_cfg_scale = get_config_item_or_set_default(
 )
 default_sample_sharpness = get_config_item_or_set_default(
     key='default_sample_sharpness',
-    default_value=2.0,
+    default_value=3.0,
     validator=lambda x: isinstance(x, numbers.Number)
 )
 default_sampler = get_config_item_or_set_default(
@@ -359,7 +359,12 @@ available_aspect_ratios = get_config_item_or_set_default(
     #     '1664*576', '1728*576'
     # ],
     default_value=[
-        '1024*1024'
+        '1472*704',  # cinema
+        '1024*576',  # 16:9
+        '1152*832',  # 5:4
+        '1024*1024', # 1:1
+        '832*1152',  # 4:5
+        '576*1024',  # 9:16
     ],
     validator=lambda x: isinstance(x, list) and all('*' in v for v in x) and len(x) > 1
 )
@@ -397,7 +402,7 @@ example_inpaint_prompts = get_config_item_or_set_default(
 )
 default_save_metadata_to_images = get_config_item_or_set_default(
     key='default_save_metadata_to_images',
-    default_value=False,
+    default_value=True,
     validator=lambda x: isinstance(x, bool)
 )
 default_metadata_scheme = get_config_item_or_set_default(

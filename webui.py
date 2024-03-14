@@ -153,7 +153,7 @@ with shared.gradio_root:
                                       outputs=currentTask, queue=False, show_progress=False)
 
             negative_prompt = gr.Textbox(show_label=False, placeholder="Negative prompt (what you DO NOT want to see) goes here.", elem_id='negative_prompt',
-                                         container=False, autofocus=True, elem_classes='type_row', lines=1024)
+                                         container=False, autofocus=False, elem_classes='type_row', lines=1024)
 
             with gr.Row(elem_classes='advanced_check_row'):
                 input_image_checkbox = gr.Checkbox(
