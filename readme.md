@@ -4,8 +4,9 @@ Fooocus Lite is a fork of [Fooocus](https://github.com/lllyasviel/Fooocus/), an 
 
 ## Goal of this Lite version
 This fork of Fooocus is made to only expose the necessary parameters of an image generation workflow in order to keep the interface as simple as possible and allow anyone to use it, even people without any experience with Stable Diffusion and image generation softwares. <br>
-> Note: this tool is tailored to specifics needs and might not fit every use case.
+![Screenshot preview](./screenshot.png)
 
+> Note: this tool is tailored to specifics needs and might not fit every use case.
 
 
 ## How to install
