@@ -10,7 +10,13 @@ This fork of Fooocus is made to only expose the necessary parameters of an image
 
 
 ## How to install
-Please note that the following installation process might take some time and disk space.
+Please note that the following installation process might take some time and disk space (about 32Gb in total).
+
+### One click install (Windows only)
+If you are on a Windows machine, the easiest way to download Fooocus Lite is to use the installation script. See the [latest release](https://github.com/brayevalerien/Fooocus-Lite/releases/latest).
+
+### Manual install
+You can also install Fooocus Lite manually if you are not on Windows or if you have specific needs.
 
 > Before you install Fooocus Lite, please install all the requirements:
 > - [Python](https://www.python.org/downloads/)
