@@ -19,6 +19,7 @@ Please note that the following installation process might take some time and dis
 
 ### One click install (Windows only)
 If you are on a Windows machine, the easiest way to download Fooocus Lite is to use the installation script. See the [latest release](https://github.com/brayevalerien/Fooocus-Lite/releases/latest).
+> Important note: the one click installer might not work for some reason. If you encounter an error after executing `start.bat`, please [open an issue](https://github.com/brayevalerien/Fooocus-Lite/issues) to help me fix the problem and try [installing Fooocus Lite manually](https://github.com/brayevalerien/Fooocus-Lite?tab=readme-ov-file#manual-install).
 
 ### Manual install
 You can also install Fooocus Lite manually if you are not on Windows or if you have specific needs.
