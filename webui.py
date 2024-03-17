@@ -582,7 +582,7 @@ with shared.gradio_root:
 
                         with gr.Tab(label='FreeU'):
                             freeu_enabled = gr.Checkbox(
-                                label='Enabled', value=False)
+                                label='Enabled', value=True)
                             freeu_b1 = gr.Slider(
                                 label='B1', minimum=0, maximum=2, step=0.01, value=1.01)
                             freeu_b2 = gr.Slider(
