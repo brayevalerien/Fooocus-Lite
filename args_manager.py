@@ -31,6 +31,9 @@ args_parser.parser.add_argument("--disable-preset-download", action='store_true'
 args_parser.parser.add_argument("--always-download-new-model", action='store_true',
                                 help="Always download newer models ", default=False)
 
+args_parser.parser.add_argument("--tab_title", type=str, help="Title of the UI tab in the browser", default="Fooocus Lite")
+
+
 args_parser.parser.set_defaults(
     disable_cuda_malloc=True,
     in_browser=True,

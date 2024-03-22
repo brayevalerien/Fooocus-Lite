@@ -89,7 +89,7 @@ def generate_clicked(task):
 
 reload_javascript()
 
-title = f'Studio IA'
+title = args_manager.args.tab_title
 
 # if isinstance(args_manager.args.preset, str):
 #     title += ' ' + args_manager.args.preset
@@ -331,6 +331,9 @@ with shared.gradio_root:
                 show_label=True
             )
             
+            mixing_image_prompt_and_inpaint = gr.Checkbox(label='Use guide images for inpainting',
+                                            value=False)
+            
             seed_random = gr.Checkbox(label='Generate random image', value=True)
             # workaround for https://github.com/gradio-app/gradio/issues/5354
             image_seed = gr.Textbox(
@@ -528,8 +531,8 @@ with shared.gradio_root:
 
                             mixing_image_prompt_and_vary_upscale = gr.Checkbox(label='Mixing Image Prompt and Vary/Upscale',
                                                                             value=False)
-                            mixing_image_prompt_and_inpaint = gr.Checkbox(label='Mixing Image Prompt and Inpaint',
-                                                                        value=False)
+                            # mixing_image_prompt_and_inpaint = gr.Checkbox(label='Mixing Image Prompt and Inpaint',
+                            #                                             value=False)
 
                             controlnet_softness = gr.Slider(label='Softness of ControlNet', minimum=0.0, maximum=1.0,
                                                             step=0.001, value=0.25,
