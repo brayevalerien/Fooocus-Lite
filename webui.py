@@ -116,7 +116,7 @@ with shared.gradio_root:
             with gr.Row(elem_classes='type_row'):
                 with gr.Column(scale=17):
                     prompt = gr.Textbox(show_label=False, placeholder="Positive prompt (what you want to see) goes here.", elem_id='positive_prompt',
-                                        container=False, autofocus=True, elem_classes='type_row', lines=1024)
+                                        container=False, autofocus=True, elem_classes='type_row', lines=3)
 
                     default_prompt = modules.config.default_prompt
                     if isinstance(default_prompt, str) and default_prompt != '':
@@ -153,7 +153,7 @@ with shared.gradio_root:
                                       outputs=currentTask, queue=False, show_progress=False)
 
             negative_prompt = gr.Textbox(show_label=False, placeholder="Negative prompt (what you DO NOT want to see) goes here.", elem_id='negative_prompt',
-                                         container=False, autofocus=False, elem_classes='type_row', lines=1024)
+                                         container=False, autofocus=False, elem_classes='type_row', lines=3)
 
             with gr.Row(elem_classes='advanced_check_row'):
                 input_image_checkbox = gr.Checkbox(
@@ -646,7 +646,7 @@ with shared.gradio_root:
                 return [
                     gr.update(visible=True),
                     gr.update(visible=False, value=[]),
-                    gr.Dataset.update(visible=True, samples=modules.config.example_inpaint_prompts),
+                    gr.Dataset.update(visible=False, samples=modules.config.example_inpaint_prompts),
                     False, 'None', 0.5, 0.0
                 ]
 
