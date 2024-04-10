@@ -140,7 +140,7 @@ def worker():
         args.reverse()
 
         prompt = args.pop()
-        negative_prompt = args.pop() + " " + modules.config.default_prompt_negative
+        negative_prompt = args.pop() + ", " + modules.config.default_prompt_negative
         style_selections = args.pop()
         performance_selection = Performance(args.pop())
         aspect_ratios_selection = args.pop()

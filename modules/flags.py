@@ -60,7 +60,7 @@ refiner_swap_method = 'joint'
 cn_ip = "Atmosphere"
 cn_ip_face = "Face"
 cn_canny = "Shapes"
-cn_cpds = "Depth"
+cn_cpds = "Structure"
 
 ip_list = [cn_ip, cn_canny, cn_cpds, cn_ip_face]
 default_ip = cn_canny
