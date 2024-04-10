@@ -32,12 +32,12 @@ git clone https://github.com/brayevalerien/Fooocus-Lite
 Then cd into the cloned directory and create a Conda environment using Python 3.10.11:
 ```bash
 cd Fooocus-Lite
-conda create -n fooocus-lite python=3.10.11 -y
+conda create -n flite python=3.10.11 -y
 ```
 
 And activate this environment and install the required Python libraries using the `requirements.txt`:
 ```bash
-conda activate fooocus-lite
+conda activate flite
 pip install -r requirements.txt
 ```
 
