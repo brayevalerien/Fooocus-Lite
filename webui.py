@@ -21,6 +21,7 @@ from modules.private_logger import get_current_html_path
 from modules.sdxl_styles import legal_style_names
 from modules.ui_gradio_extensions import reload_javascript
 from modules.util import is_json
+import modules.metadata_extracter as emd
 
 
 def get_task(*args):
@@ -235,6 +236,20 @@ with shared.gradio_root:
                     #     '* Powered by Fooocus Inpaint Engine <a href="https://github.com/lllyasviel/Fooocus/discussions/414" target="_blank">\U0001F4D4 Document</a>')
                     example_inpaint_prompts.click(
                         lambda x: x[0], inputs=example_inpaint_prompts, outputs=inpaint_additional_prompt, show_progress=False, queue=False)
+                    
+                with gr.TabItem(label="Prompt Retreiver") as pr_tab:
+                    with gr.Row():
+                        input_image = gr.Image(type="filepath", sources=["upload", "clipboard"], height="30vw")
+                        with gr.Column():
+                            positive = gr.Text(label="Positive prompt", show_label=True, show_copy_button=True)
+                            negative = gr.Text(label="Negative prompt", show_label=True, show_copy_button=True)
+                            model = gr.Text(label="Model name", show_label=True, show_copy_button=True)
+                        
+                    input_image.change(
+                        fn=emd.extract_metadata,
+                        inputs=input_image, 
+                        outputs=[positive, negative, model]
+                    )
 
                 # The following tabs are in a separate gr.Tabs element in order to be hidden
                 with gr.Tabs(visible=False):

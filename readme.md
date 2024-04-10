@@ -51,3 +51,4 @@ Once Fooocus Lite has been installed, it can be launched by executing [`start.ba
 > When Fooocus Lite is launched for the first time, it will need to set up some things and download about 27Gb of SDXL models. So make sure you have some available disk space and take a coffee!
 
 After a few seconds, the Web UI should open in your default browser. If it is not the case, go to this URL: [http://127.0.0.1:5429](http://127.0.0.1:5429).
+r
