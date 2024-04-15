@@ -88,12 +88,17 @@ def parse_automatic_parameters(parameters: dict) -> dict:
     Returns:
         dict
     """
-    positive = parameters.split("\n")[0] or ""
-    negative = parameters.split("\n")[1].replace("Negative prompt: ", "") or ""
+    positive = parameters.split("Negative prompt: ")[0] or ""
+    if positive.endswith("\n"): positive = positive[:-1]
+    negative = parameters.split("Negative prompt: ")[1].split("Steps: ")[0] or ""
+    if negative.endswith("\n"): negative = negative[:-1]
+    for prompt in [positive, negative]:
+        if prompt.endswith("\n"): prompt = prompt[:-2]
     model = ""
     for parameter in parameters.split(", "):
         if parameter.startswith("Model: "):
             model = parameter.replace("Model: ", "")
+            break # break to avoid counting ControlNets modelss
     return {"positive": positive, "negative": negative, "model": model}
 
 def extract_info(raw_metadata: str) -> dict:
