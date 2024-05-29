@@ -33,6 +33,8 @@ args_parser.parser.add_argument("--always-download-new-model", action='store_tru
 
 args_parser.parser.add_argument("--tab_title", type=str, help="Title of the UI tab in the browser", default="Fooocus Lite")
 
+args_parser.parser.add_argument("--show_loras", type=bool, help="Adds a LoRA menu to allow the user to change the LoRAs that are used", default=False)
+
 
 args_parser.parser.set_defaults(
     disable_cuda_malloc=True,

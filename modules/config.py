@@ -251,14 +251,6 @@ default_loras = get_config_item_or_set_default(
             "None",
             1.0
         ],
-        [
-            "None",
-            1.0
-        ],
-        [
-            "None",
-            1.0
-        ]
     ],
     validator=lambda x: isinstance(x, list) and all(len(y) == 2 and isinstance(y[0], str) and isinstance(y[1], numbers.Number) for y in x)
 )

@@ -355,6 +355,8 @@ with shared.gradio_root:
                 label='Seed', value=0, max_lines=1, visible=False)
 
             def random_checked(r):
+
+
                 return gr.update(visible=not r)
 
             def refresh_seed(r, seed_string):
@@ -371,6 +373,23 @@ with shared.gradio_root:
 
             seed_random.change(random_checked, inputs=[seed_random], outputs=[image_seed],
                                 queue=False, show_progress=False)
+            
+            with gr.Accordion(label="LoRAs", visible=args_manager.args.show_loras, open=False):
+                with gr.Group():
+                    lora_ctrls = []
+
+                    for i, (n, v) in enumerate(modules.config.default_loras):
+                        with gr.Row():
+                            lora_enabled = gr.Checkbox(label='Enable', value=i==0,
+                                                    elem_classes=['lora_enable', 'min_check'], scale=1)
+                            lora_model = gr.Dropdown(label=f'LoRA {i + 1}',
+                                                    choices=['None'] + modules.config.lora_filenames, value=n,
+                                                    elem_classes='lora_model', scale=5)
+                            lora_weight = gr.Slider(label='Weight', minimum=modules.config.default_loras_min_weight,
+                                                    maximum=modules.config.default_loras_max_weight, step=0.01, value=v,
+                                                    elem_classes='lora_weight', scale=5)
+                            lora_ctrls += [lora_enabled,
+                                        lora_model, lora_weight]
 
             def update_history_link():
                 if args_manager.args.disable_image_log:
@@ -439,21 +458,21 @@ with shared.gradio_root:
                         refiner_model.change(lambda x: gr.update(visible=x != 'None'),
                                             inputs=refiner_model, outputs=refiner_switch, show_progress=False, queue=False)
 
-                    with gr.Group():
-                        lora_ctrls = []
+                    # with gr.Group():
+                    #     lora_ctrls = []
 
-                        for i, (n, v) in enumerate(modules.config.default_loras):
-                            with gr.Row():
-                                lora_enabled = gr.Checkbox(label='Enable', value=True,
-                                                        elem_classes=['lora_enable', 'min_check'], scale=1)
-                                lora_model = gr.Dropdown(label=f'LoRA {i + 1}',
-                                                        choices=['None'] + modules.config.lora_filenames, value=n,
-                                                        elem_classes='lora_model', scale=5)
-                                lora_weight = gr.Slider(label='Weight', minimum=modules.config.default_loras_min_weight,
-                                                        maximum=modules.config.default_loras_max_weight, step=0.01, value=v,
-                                                        elem_classes='lora_weight', scale=5)
-                                lora_ctrls += [lora_enabled,
-                                            lora_model, lora_weight]
+                    #     for i, (n, v) in enumerate(modules.config.default_loras):
+                    #         with gr.Row():
+                    #             lora_enabled = gr.Checkbox(label='Enable', value=True,
+                    #                                     elem_classes=['lora_enable', 'min_check'], scale=1)
+                    #             lora_model = gr.Dropdown(label=f'LoRA {i + 1}',
+                    #                                     choices=['None'] + modules.config.lora_filenames, value=n,
+                    #                                     elem_classes='lora_model', scale=5)
+                    #             lora_weight = gr.Slider(label='Weight', minimum=modules.config.default_loras_min_weight,
+                    #                                     maximum=modules.config.default_loras_max_weight, step=0.01, value=v,
+                    #                                     elem_classes='lora_weight', scale=5)
+                    #             lora_ctrls += [lora_enabled,
+                    #                         lora_model, lora_weight]
 
                     with gr.Row():
                         model_refresh = gr.Button(
