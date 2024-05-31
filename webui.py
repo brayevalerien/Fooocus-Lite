@@ -96,6 +96,7 @@ title = args_manager.args.tab_title
 #     title += ' ' + args_manager.args.preset
 
 shared.gradio_root = gr.Blocks(
+    theme=args_manager.args.theme_name,
     title=title,
     css=modules.html.css).queue()
 

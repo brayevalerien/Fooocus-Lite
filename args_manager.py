@@ -35,6 +35,7 @@ args_parser.parser.add_argument("--tab_title", type=str, help="Title of the UI t
 
 args_parser.parser.add_argument("--show_loras", type=bool, help="Adds a LoRA menu to allow the user to change the LoRAs that are used", default=False)
 
+args_parser.parser.add_argument("--theme_name", type=str, help="Theme for the gradio UI", default=None)
 
 args_parser.parser.set_defaults(
     disable_cuda_malloc=True,
