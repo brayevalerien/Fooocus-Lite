@@ -113,9 +113,9 @@ class StepsUOV(IntEnum):
 
 
 class Performance(Enum):
-    QUALITY = 'High'
+    QUALITY = 'Quality'
     # SPEED = 'Speed'
-    EXTREME_SPEED = 'Draft'
+    # EXTREME_SPEED = 'Draft'
 
     @classmethod
     def list(cls) -> list:
