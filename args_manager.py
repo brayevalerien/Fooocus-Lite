@@ -29,7 +29,7 @@ args_parser.parser.add_argument("--disable-preset-download", action='store_true'
                                 help="Disables downloading models for presets", default=False)
 
 args_parser.parser.add_argument("--always-download-new-model", action='store_true',
-                                help="Always download newer models ", default=False)
+                                help="Always download newer models ", default=True)
 
 args_parser.parser.add_argument("--tab_title", type=str, help="Title of the UI tab in the browser", default="Fooocus Lite")
 

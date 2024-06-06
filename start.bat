@@ -2,12 +2,12 @@
 
 set "FLPATH=."
 set "NAME=Fooocus Lite"
-set "VERSION=1.1"
+set "VERSION=1.2"
 set "ARGS="
 
 echo ======== Starting Fooocus Lite ========
 echo [%NAME% launcher] Activating virtual environment...
-call conda activate flite
+call conda activate fooocus-lite
 
 echo [%NAME% launcher] Lauching Fooocus Lite...
 python %FLPATH%/start.py --preset realistic --tab_title "%NAME% v%VERSION%" %ARGS%
