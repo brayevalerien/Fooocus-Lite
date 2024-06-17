@@ -10,7 +10,7 @@ This fork of Fooocus is made to only expose the necessary parameters of an image
 
 
 ## How to install
-Please note that the following installation process might take some time and disk space (about 32Gb in total).
+Please note that the following installation process might take some time and disk space (about 27Gb in total).
 
 > Before you install Fooocus Lite, please install all the requirements:
 > - [Python](https://www.python.org/downloads/)
@@ -48,7 +48,10 @@ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.o
 
 ## How to run
 Once Fooocus Lite has been installed, it can be launched by executing [`start.bat`](./start.bat) (in the root directory of Fooocus Lite).
-> When Fooocus Lite is launched for the first time, it will need to set up some things and download about 27Gb of SDXL models. So make sure you have some available disk space and take a coffee!
+> When Fooocus Lite is launched for the first time, it will need to set up some things and download about 20Gb of SDXL models. So make sure you have some available disk space and take a coffee!
 
-After a few seconds, the Web UI should open in your default browser. If it is not the case, go to this URL: [http://127.0.0.1:5429](http://127.0.0.1:5429).
-r
+After a few seconds, the Web UI should open in your default browser. If it is not the case, go to this URL: [http://120.0.0.1:5429](http://120.0.0.1:5429).
+
+You can pass optional arguments to Flite by adding them in the [`start.bat`](./start.bat) file. In addition to arguments supported by Fooocus, there are two arguments:
+- `--show_loras`: set to `True` to get access to the LoRAs pannel. Defaults to `False` since Flite is intended to be used by very beginners, but more advanced users should be able to use LoRAs.
+- `--theme_name`: set to the ID of a name from the [Gradio theme gallery](https://huggingface.co/spaces/gradio/theme-gallery) to change Flite theme.
