@@ -7,7 +7,7 @@ set "ARGS="
 
 echo ======== Starting Fooocus Lite ========
 echo [%NAME% launcher] Activating virtual environment...
-call conda activate fooocus-lite
+call conda activate flite
 
 echo [%NAME% launcher] Lauching Fooocus Lite...
 python %FLPATH%/start.py --preset realistic --tab_title "%NAME% v%VERSION%" %ARGS%
