@@ -4,7 +4,7 @@
     "default_refiner_switch": 0.5,
     "default_loras": [
         [
-            "SDXL_FILM_PHOTOGRAPHY_STYLE_BetaV0.4.safetensors",
+            "SDXL_FILM_PHOTOGRAPHY_STYLE_V1.safetensors",
             0.25
         ],
         [
@@ -37,7 +37,7 @@
     },
     "embeddings_downloads": {},
     "lora_downloads": {
-        "SDXL_FILM_PHOTOGRAPHY_STYLE_BetaV0.4.safetensors": "https://huggingface.co/lllyasviel/fav_models/resolve/main/fav/SDXL_FILM_PHOTOGRAPHY_STYLE_BetaV0.4.safetensors"
+        "SDXL_FILM_PHOTOGRAPHY_STYLE_V1.safetensors": "https://huggingface.co/mashb1t/fav_models/resolve/main/fav/SDXL_FILM_PHOTOGRAPHY_STYLE_V1.safetensors"
     },
     "previous_default_models": []
 }

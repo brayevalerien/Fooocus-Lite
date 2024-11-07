@@ -53,3 +53,4 @@ user_path_config-deprecated.txt
 /auth.json
 .DS_Store
 install.bat
+start.bat
