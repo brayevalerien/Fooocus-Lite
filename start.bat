@@ -2,8 +2,8 @@
 
 set "FLPATH=."
 set "NAME=Fooocus Lite"
-set "VERSION=1.2"
-set "ARGS="
+set "VERSION=1.2 (test branch)"
+set "ARGS=--show_loras True"
 
 echo ======== Starting Fooocus Lite ========
 echo [%NAME% launcher] Activating virtual environment...
