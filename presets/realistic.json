@@ -31,7 +31,7 @@
     ],
     "default_aspect_ratio": "1024*1024",
     "checkpoint_downloads": {
-        "Portrait.safetensors": "https://civitai.com/api/download/models/233092",
+        "Portrait.safetensors": "https://huggingface.co/AiWise/BetterThanWords-merged-SDXL-LoRA-v3/resolve/main/BetterThanWords-merged-SDXL-LoRA-v3.safetensors",
         "Lifelike.safetensors": "https://huggingface.co/imagepipeline/Copax-TimeLessXL-SDXL1.0/resolve/main/copaxTimelessxlSDXL1_v9.safetensors",
         "Vibrant.safetensors": "https://huggingface.co/RunDiffusion/Juggernaut-XL-v9/resolve/main/Juggernaut-XL_v9_RunDiffusionPhoto_v2.safetensors"
     },
