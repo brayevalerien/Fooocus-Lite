@@ -147,7 +147,8 @@ with shared.gradio_root:
                 ],
                 elem_id="final_gallery",
             )
-            with gr.Row(elem_classes="type_row"):
+            # with gr.Row(elem_classes="type_row"):
+            with gr.Row(equal_height=True):
                 with gr.Column(scale=17):
                     prompt = gr.Textbox(
                         show_label=False,
@@ -155,8 +156,8 @@ with shared.gradio_root:
                         elem_id="positive_prompt",
                         container=False,
                         autofocus=True,
-                        elem_classes="type_row",
-                        lines=3,
+                        # elem_classes="type_row",
+                        lines=5,
                     )
 
                     default_prompt = modules.config.default_prompt
@@ -167,27 +168,29 @@ with shared.gradio_root:
                     generate_button = gr.Button(
                         label="Generate",
                         value="Generate",
-                        elem_classes="type_row",
+                        size="lg",
+                        # elem_classes="type_row",
                         elem_id="generate_button",
                         visible=True,
                     )
                     load_parameter_button = gr.Button(
                         label="Load Parameters",
                         value="Load Parameters",
-                        elem_classes="type_row",
+                        size="lg",
+                        # elem_classes="type_row",
                         elem_id="load_parameter_button",
                         visible=False,
                     )
                     skip_button = gr.Button(
                         label="Skip",
                         value="Skip",
-                        elem_classes="type_row_half",
+                        # elem_classes="type_row_half",
                         visible=False,
                     )
                     stop_button = gr.Button(
                         label="Stop",
                         value="Stop",
-                        elem_classes="type_row_half",
+                        # elem_classes="type_row_half",
                         elem_id="stop_button",
                         visible=False,
                     )
