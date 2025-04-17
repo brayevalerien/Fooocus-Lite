@@ -444,7 +444,7 @@ with shared.gradio_root:
                                     value=flags.disabled,
                                 )
                                 gr.HTML(
-                                    '<a href="https://github.com/lllyasviel/Fooocus/discussions/390" target="_blank">\U0001F4D4 Document</a>'
+                                    '<a href="https://github.com/lllyasviel/Fooocus/discussions/390" target="_blank">\U0001f4d4 Document</a>'
                                 )
                     with gr.TabItem(label="Describe") as desc_tab:
                         with gr.Row():
@@ -467,7 +467,7 @@ with shared.gradio_root:
                                     value="Describe this Image into Prompt"
                                 )
                                 gr.HTML(
-                                    '<a href="https://github.com/lllyasviel/Fooocus/discussions/1363" target="_blank">\U0001F4D4 Document</a>'
+                                    '<a href="https://github.com/lllyasviel/Fooocus/discussions/1363" target="_blank">\U0001f4d4 Document</a>'
                                 )
                     with gr.TabItem(label="Metadata") as load_tab:
                         with gr.Column():
@@ -590,11 +590,11 @@ with shared.gradio_root:
             )
             overwrite_step = gr.Slider(
                 label="Sampling steps",
-                minimum=-1,
+                minimum=1,
                 maximum=100,
                 step=1,
                 value=modules.config.default_overwrite_step,
-                info="Set to -1 to use default settings.",
+                info="More steps yield better results at the cost of slower inference.",
             )
 
             mixing_image_prompt_and_inpaint = gr.Checkbox(
@@ -688,7 +688,7 @@ with shared.gradio_root:
                     style_search_bar = gr.Textbox(
                         show_label=False,
                         container=False,
-                        placeholder="\U0001F50E Type here to search styles ...",
+                        placeholder="\U0001f50e Type here to search styles ...",
                         value="",
                         label="Search Styles",
                     )
@@ -800,7 +800,7 @@ with shared.gradio_root:
                         info="Higher value means image and texture are sharper.",
                     )
                     gr.HTML(
-                        '<a href="https://github.com/lllyasviel/Fooocus/discussions/117" target="_blank">\U0001F4D4 Document</a>'
+                        '<a href="https://github.com/lllyasviel/Fooocus/discussions/117" target="_blank">\U0001f4d4 Document</a>'
                     )
                     dev_mode = gr.Checkbox(
                         label="Developer Debug Mode", value=False, container=False
