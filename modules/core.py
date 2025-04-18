@@ -13,8 +13,14 @@ import ldm_patched.modules.samplers
 import ldm_patched.modules.latent_formats
 
 from ldm_patched.modules.sd import load_checkpoint_guess_config
-from ldm_patched.contrib.external import VAEDecode, EmptyLatentImage, VAEEncode, VAEEncodeTiled, VAEDecodeTiled, \
-    ControlNetApplyAdvanced
+from ldm_patched.contrib.external import (
+    VAEDecode,
+    EmptyLatentImage,
+    VAEEncode,
+    VAEEncodeTiled,
+    VAEDecodeTiled,
+    ControlNetApplyAdvanced,
+)
 from ldm_patched.contrib.external_freelunch import FreeU_V2
 from ldm_patched.modules.sample import prepare_mask
 from modules.lora import match_lora
@@ -43,18 +49,26 @@ class StableDiffusionModel:
         self.filename = filename
         self.unet_with_lora = unet
         self.clip_with_lora = clip
-        self.visited_loras = ''
+        self.visited_loras = ""
 
         self.lora_key_map_unet = {}
         self.lora_key_map_clip = {}
 
         if self.unet is not None:
-            self.lora_key_map_unet = model_lora_keys_unet(self.unet.model, self.lora_key_map_unet)
-            self.lora_key_map_unet.update({x: x for x in self.unet.model.state_dict().keys()})
+            self.lora_key_map_unet = model_lora_keys_unet(
+                self.unet.model, self.lora_key_map_unet
+            )
+            self.lora_key_map_unet.update(
+                {x: x for x in self.unet.model.state_dict().keys()}
+            )
 
         if self.clip is not None:
-            self.lora_key_map_clip = model_lora_keys_clip(self.clip.cond_stage_model, self.lora_key_map_clip)
-            self.lora_key_map_clip.update({x: x for x in self.clip.cond_stage_model.state_dict().keys()})
+            self.lora_key_map_clip = model_lora_keys_clip(
+                self.clip.cond_stage_model, self.lora_key_map_clip
+            )
+            self.lora_key_map_clip.update(
+                {x: x for x in self.clip.cond_stage_model.state_dict().keys()}
+            )
 
     @torch.no_grad()
     @torch.inference_mode()
@@ -69,21 +83,23 @@ class StableDiffusionModel:
         if self.unet is None:
             return
 
-        print(f'Request to load LoRAs {str(loras)} for model [{self.filename}].')
+        print(f"Request to load LoRAs {str(loras)} for model [{self.filename}].")
 
         loras_to_load = []
 
         for name, weight in loras:
-            if name == 'None':
+            if name == "None":
                 continue
 
             if os.path.exists(name):
                 lora_filename = name
             else:
-                lora_filename = get_file_from_folder_list(name, modules.config.paths_loras)
+                lora_filename = get_file_from_folder_list(
+                    name, modules.config.paths_loras
+                )
 
             if not os.path.exists(lora_filename):
-                print(f'Lora file not found: {lora_filename}')
+                print(f"Lora file not found: {lora_filename}")
                 continue
 
             loras_to_load.append((lora_filename, weight))
@@ -92,7 +108,9 @@ class StableDiffusionModel:
         self.clip_with_lora = self.clip.clone() if self.clip is not None else None
 
         for lora_filename, weight in loras_to_load:
-            lora_unmatch = ldm_patched.modules.utils.load_torch_file(lora_filename, safe_load=False)
+            lora_unmatch = ldm_patched.modules.utils.load_torch_file(
+                lora_filename, safe_load=False
+            )
             lora_unet, lora_unmatch = match_lora(lora_unmatch, self.lora_key_map_unet)
             lora_clip, lora_unmatch = match_lora(lora_unmatch, self.lora_key_map_clip)
 
@@ -101,21 +119,27 @@ class StableDiffusionModel:
                 continue
 
             if len(lora_unmatch) > 0:
-                print(f'Loaded LoRA [{lora_filename}] for model [{self.filename}] '
-                      f'with unmatched keys {list(lora_unmatch.keys())}')
+                print(
+                    f"Loaded LoRA [{lora_filename}] for model [{self.filename}] "
+                    f"with unmatched keys {list(lora_unmatch.keys())}"
+                )
 
             if self.unet_with_lora is not None and len(lora_unet) > 0:
                 loaded_keys = self.unet_with_lora.add_patches(lora_unet, weight)
-                print(f'Loaded LoRA [{lora_filename}] for UNet [{self.filename}] '
-                      f'with {len(loaded_keys)} keys at weight {weight}.')
+                print(
+                    f"Loaded LoRA [{lora_filename}] for UNet [{self.filename}] "
+                    f"with {len(loaded_keys)} keys at weight {weight}."
+                )
                 for item in lora_unet:
                     if item not in loaded_keys:
                         print("UNet LoRA key skipped: ", item)
 
             if self.clip_with_lora is not None and len(lora_clip) > 0:
                 loaded_keys = self.clip_with_lora.add_patches(lora_clip, weight)
-                print(f'Loaded LoRA [{lora_filename}] for CLIP [{self.filename}] '
-                      f'with {len(loaded_keys)} keys at weight {weight}.')
+                print(
+                    f"Loaded LoRA [{lora_filename}] for CLIP [{self.filename}] "
+                    f"with {len(loaded_keys)} keys at weight {weight}."
+                )
                 for item in lora_clip:
                     if item not in loaded_keys:
                         print("CLIP LoRA key skipped: ", item)
@@ -135,22 +159,37 @@ def load_controlnet(ckpt_filename):
 
 @torch.no_grad()
 @torch.inference_mode()
-def apply_controlnet(positive, negative, control_net, image, strength, start_percent, end_percent):
-    return opControlNetApplyAdvanced.apply_controlnet(positive=positive, negative=negative, control_net=control_net,
-        image=image, strength=strength, start_percent=start_percent, end_percent=end_percent)
+def apply_controlnet(
+    positive, negative, control_net, image, strength, start_percent, end_percent
+):
+    return opControlNetApplyAdvanced.apply_controlnet(
+        positive=positive,
+        negative=negative,
+        control_net=control_net,
+        image=image,
+        strength=strength,
+        start_percent=start_percent,
+        end_percent=end_percent,
+    )
 
 
 @torch.no_grad()
 @torch.inference_mode()
 def load_model(ckpt_filename):
-    unet, clip, vae, clip_vision = load_checkpoint_guess_config(ckpt_filename, embedding_directory=path_embeddings)
-    return StableDiffusionModel(unet=unet, clip=clip, vae=vae, clip_vision=clip_vision, filename=ckpt_filename)
+    unet, clip, vae, clip_vision = load_checkpoint_guess_config(
+        ckpt_filename, embedding_directory=path_embeddings
+    )
+    return StableDiffusionModel(
+        unet=unet, clip=clip, vae=vae, clip_vision=clip_vision, filename=ckpt_filename
+    )
 
 
 @torch.no_grad()
 @torch.inference_mode()
 def generate_empty_latent(width=1024, height=1024, batch_size=1):
-    return opEmptyLatentImage.generate(width=width, height=height, batch_size=batch_size)[0]
+    return opEmptyLatentImage.generate(
+        width=width, height=height, batch_size=batch_size
+    )[0]
 
 
 @torch.no_grad()
@@ -185,7 +224,9 @@ def encode_vae_inpaint(vae, pixels, mask):
     B, C, H, W = latent.shape
 
     latent_mask = mask[:, None, :, :]
-    latent_mask = torch.nn.functional.interpolate(latent_mask, size=(H * 8, W * 8), mode="bilinear").round()
+    latent_mask = torch.nn.functional.interpolate(
+        latent_mask, size=(H * 8, W * 8), mode="bilinear"
+    ).round()
     latent_mask = torch.nn.functional.max_pool2d(latent_mask, (8, 8)).round().to(latent)
 
     return latent, latent_mask
@@ -208,7 +249,16 @@ class VAEApprox(torch.nn.Module):
         extra = 11
         x = torch.nn.functional.interpolate(x, (x.shape[2] * 2, x.shape[3] * 2))
         x = torch.nn.functional.pad(x, (extra, extra, extra, extra))
-        for layer in [self.conv1, self.conv2, self.conv3, self.conv4, self.conv5, self.conv6, self.conv7, self.conv8]:
+        for layer in [
+            self.conv1,
+            self.conv2,
+            self.conv3,
+            self.conv4,
+            self.conv5,
+            self.conv6,
+            self.conv7,
+            self.conv8,
+        ]:
             x = layer(x)
             x = torch.nn.functional.leaky_relu(x, 0.1)
         return x
@@ -223,13 +273,18 @@ def get_previewer(model):
     global VAE_approx_models
 
     from modules.config import path_vae_approx
-    is_sdxl = isinstance(model.model.latent_format, ldm_patched.modules.latent_formats.SDXL)
-    vae_approx_filename = os.path.join(path_vae_approx, 'xlvaeapp.pth' if is_sdxl else 'vaeapp_sd15.pth')
+
+    is_sdxl = isinstance(
+        model.model.latent_format, ldm_patched.modules.latent_formats.SDXL
+    )
+    vae_approx_filename = os.path.join(
+        path_vae_approx, "xlvaeapp.pth" if is_sdxl else "vaeapp_sd15.pth"
+    )
 
     if vae_approx_filename in VAE_approx_models:
         VAE_approx_model = VAE_approx_models[vae_approx_filename]
     else:
-        sd = torch.load(vae_approx_filename, map_location='cpu')
+        sd = torch.load(vae_approx_filename, map_location="cpu")
         VAE_approx_model = VAEApprox()
         VAE_approx_model.load_state_dict(sd)
         del sd
@@ -251,7 +306,7 @@ def get_previewer(model):
         with torch.no_grad():
             x_sample = x0.to(VAE_approx_model.current_type)
             x_sample = VAE_approx_model(x_sample) * 127.5 + 127.5
-            x_sample = einops.rearrange(x_sample, 'b c h w -> b h w c')[0]
+            x_sample = einops.rearrange(x_sample, "b c h w -> b h w c")[0]
             x_sample = x_sample.cpu().numpy().clip(0, 255).astype(np.uint8)
             return x_sample
 
@@ -260,18 +315,44 @@ def get_previewer(model):
 
 @torch.no_grad()
 @torch.inference_mode()
-def ksampler(model, positive, negative, latent, seed=None, steps=30, cfg=7.0, sampler_name='dpmpp_2m_sde_gpu',
-             scheduler='karras', denoise=1.0, disable_noise=False, start_step=None, last_step=None,
-             force_full_denoise=False, callback_function=None, refiner=None, refiner_switch=-1,
-             previewer_start=None, previewer_end=None, sigmas=None, noise_mean=None, disable_preview=False):
-
+def ksampler(
+    model,
+    positive,
+    negative,
+    latent,
+    seed=None,
+    steps=30,
+    cfg=7.0,
+    sampler_name="dpmpp_2m_sde_gpu",
+    scheduler="karras",
+    denoise=1.0,
+    disable_noise=False,
+    start_step=None,
+    last_step=None,
+    force_full_denoise=False,
+    callback_function=None,
+    refiner=None,
+    refiner_switch=-1,
+    previewer_start=None,
+    previewer_end=None,
+    sigmas=None,
+    noise_mean=None,
+    disable_preview=False,
+):
     if sigmas is not None:
-        sigmas = sigmas.clone().to(ldm_patched.modules.model_management.get_torch_device())
+        sigmas = sigmas.clone().to(
+            ldm_patched.modules.model_management.get_torch_device()
+        )
 
     latent_image = latent["samples"]
 
     if disable_noise:
-        noise = torch.zeros(latent_image.size(), dtype=latent_image.dtype, layout=latent_image.layout, device="cpu")
+        noise = torch.zeros(
+            latent_image.size(),
+            dtype=latent_image.dtype,
+            layout=latent_image.layout,
+            device="cpu",
+        )
     else:
         batch_inds = latent["batch_index"] if "batch_index" in latent else None
         noise = ldm_patched.modules.sample.prepare_noise(latent_image, seed, batch_inds)
@@ -305,15 +386,27 @@ def ksampler(model, positive, negative, latent, seed=None, steps=30, cfg=7.0, sa
     ldm_patched.modules.samplers.sample = modules.sample_hijack.sample_hacked
 
     try:
-        samples = ldm_patched.modules.sample.sample(model,
-                                                    noise, steps, cfg, sampler_name, scheduler,
-                                                    positive, negative, latent_image,
-                                                    denoise=denoise, disable_noise=disable_noise,
-                                                    start_step=start_step,
-                                                    last_step=last_step,
-                                                    force_full_denoise=force_full_denoise, noise_mask=noise_mask,
-                                                    callback=callback,
-                                                    disable_pbar=disable_pbar, seed=seed, sigmas=sigmas)
+        samples = ldm_patched.modules.sample.sample(
+            model,
+            noise,
+            steps,
+            cfg,
+            sampler_name,
+            scheduler,
+            positive,
+            negative,
+            latent_image,
+            denoise=denoise,
+            disable_noise=disable_noise,
+            start_step=start_step,
+            last_step=last_step,
+            force_full_denoise=force_full_denoise,
+            noise_mask=noise_mask,
+            callback=callback,
+            disable_pbar=disable_pbar,
+            seed=seed,
+            sigmas=sigmas,
+        )
 
         out = latent.copy()
         out["samples"] = samples
@@ -326,7 +419,7 @@ def ksampler(model, positive, negative, latent, seed=None, steps=30, cfg=7.0, sa
 @torch.no_grad()
 @torch.inference_mode()
 def pytorch_to_numpy(x):
-    return [np.clip(255. * y.cpu().numpy(), 0, 255).astype(np.uint8) for y in x]
+    return [np.clip(255.0 * y.cpu().numpy(), 0, 255).astype(np.uint8) for y in x]
 
 
 @torch.no_grad()

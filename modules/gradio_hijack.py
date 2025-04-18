@@ -453,7 +453,7 @@ class Image(
 
 all_components = []
 
-if not hasattr(Block, 'original__init__'):
+if not hasattr(Block, "original__init__"):
     Block.original_init = Block.__init__
 
 
@@ -467,7 +467,7 @@ Block.__init__ = blk_ini
 
 gradio.routes.asyncio = importlib.reload(gradio.routes.asyncio)
 
-if not hasattr(gradio.routes.asyncio, 'original_wait_for'):
+if not hasattr(gradio.routes.asyncio, "original_wait_for"):
     gradio.routes.asyncio.original_wait_for = gradio.routes.asyncio.wait_for
 
 
@@ -477,4 +477,3 @@ def patched_wait_for(fut, timeout):
 
 
 gradio.routes.asyncio.wait_for = patched_wait_for
-

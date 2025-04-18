@@ -13,7 +13,7 @@ inpaint_head_model = None
 class InpaintHead(torch.nn.Module):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.head = torch.nn.Parameter(torch.empty(size=(320, 5, 3, 3), device='cpu'))
+        self.head = torch.nn.Parameter(torch.empty(size=(320, 5, 3, 3), device="cpu"))
 
     def __call__(self, x):
         x = torch.nn.functional.pad(x, (1, 1, 1, 1), "replicate")
@@ -139,7 +139,16 @@ def fooocus_fill(image, mask):
     area = np.where(mask < 127)
     store = raw_image[area]
 
-    for k, repeats in [(512, 2), (256, 2), (128, 4), (64, 4), (33, 8), (15, 8), (5, 16), (3, 16)]:
+    for k, repeats in [
+        (512, 2),
+        (256, 2),
+        (128, 4),
+        (64, 4),
+        (33, 8),
+        (15, 8),
+        (5, 16),
+        (3, 16),
+    ]:
         for _ in range(repeats):
             current_image = box_blur(current_image, k)
             current_image[area] = store
@@ -171,7 +180,9 @@ class InpaintWorker:
 
         # compute filling
         if use_fill:
-            self.interested_fill = fooocus_fill(self.interested_image, self.interested_mask)
+            self.interested_fill = fooocus_fill(
+                self.interested_image, self.interested_mask
+            )
 
         # soft pixels
         self.mask = morphological_open(mask)
@@ -191,18 +202,19 @@ class InpaintWorker:
         self.latent_after_swap = latent_swap
         return
 
-    def patch(self, inpaint_head_model_path, inpaint_latent, inpaint_latent_mask, model):
+    def patch(
+        self, inpaint_head_model_path, inpaint_latent, inpaint_latent_mask, model
+    ):
         global inpaint_head_model
 
         if inpaint_head_model is None:
             inpaint_head_model = InpaintHead()
-            sd = torch.load(inpaint_head_model_path, map_location='cpu')
+            sd = torch.load(inpaint_head_model_path, map_location="cpu")
             inpaint_head_model.load_state_dict(sd)
 
-        feed = torch.cat([
-            inpaint_latent_mask,
-            model.model.process_latent_in(inpaint_latent)
-        ], dim=1)
+        feed = torch.cat(
+            [inpaint_latent_mask, model.model.process_latent_in(inpaint_latent)], dim=1
+        )
 
         inpaint_head_model.to(device=feed.device, dtype=feed.dtype)
         inpaint_head_feature = inpaint_head_model(feed)
@@ -261,4 +273,3 @@ class InpaintWorker:
 
     def visualize_mask_processing(self):
         return [self.interested_fill, self.interested_mask, self.interested_image]
-

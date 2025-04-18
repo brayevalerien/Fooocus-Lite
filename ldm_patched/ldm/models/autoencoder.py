@@ -1,14 +1,18 @@
 import torch
+
 # import pytorch_lightning as pl
 import torch.nn.functional as F
 from contextlib import contextmanager
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-from ldm_patched.ldm.modules.distributions.distributions import DiagonalGaussianDistribution
+from ldm_patched.ldm.modules.distributions.distributions import (
+    DiagonalGaussianDistribution,
+)
 
 from ldm_patched.ldm.util import instantiate_from_config
 from ldm_patched.ldm.modules.ema import LitEma
 import ldm_patched.modules.ops
+
 
 class DiagonalGaussianRegularizer(torch.nn.Module):
     def __init__(self, sample: bool = True):
@@ -167,7 +171,9 @@ class AutoencodingEngineLegacy(AutoencodingEngine):
             (1 + ddconfig["double_z"]) * embed_dim,
             1,
         )
-        self.post_quant_conv = ldm_patched.modules.ops.disable_weight_init.Conv2d(embed_dim, ddconfig["z_channels"], 1)
+        self.post_quant_conv = ldm_patched.modules.ops.disable_weight_init.Conv2d(
+            embed_dim, ddconfig["z_channels"], 1
+        )
         self.embed_dim = embed_dim
 
     def get_autoencoder_params(self) -> list:

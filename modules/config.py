@@ -92,8 +92,7 @@ def try_load_deprecated_user_path_config():
             return
 
         if input(
-            "Newer models and configs are available. "
-            "Download and update files? [Y/n]:"
+            "Newer models and configs are available. Download and update files? [Y/n]:"
         ) in ["n", "N", "No", "no", "NO"]:
             config_dict.update(deprecated_config_dict)
             print("Loading using deprecated old models and deprecated old configs.")
@@ -175,7 +174,7 @@ def get_dir_or_set_default(key, default_value, as_array=False, make_directory=Fa
 
     if v is not None:
         print(
-            f"Failed to load config key: {json.dumps({key:v})} is invalid or does not exist; will use {json.dumps({key:default_value})} instead."
+            f"Failed to load config key: {json.dumps({key: v})} is invalid or does not exist; will use {json.dumps({key: default_value})} instead."
         )
     if isinstance(default_value, list):
         dp = []
@@ -236,7 +235,7 @@ def get_config_item_or_set_default(
     else:
         if v is not None:
             print(
-                f"Failed to load config key: {json.dumps({key:v})} is invalid; will use {json.dumps({key:default_value})} instead."
+                f"Failed to load config key: {json.dumps({key: v})} is invalid; will use {json.dumps({key: default_value})} instead."
             )
         config_dict[key] = default_value
         return default_value

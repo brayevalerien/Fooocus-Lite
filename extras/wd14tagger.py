@@ -24,38 +24,42 @@ global_model = None
 global_csv = None
 
 
-def default_interrogator(image_rgb, threshold=0.35, character_threshold=0.85, exclude_tags=""):
+def default_interrogator(
+    image_rgb, threshold=0.35, character_threshold=0.85, exclude_tags=""
+):
     global global_model, global_csv
 
     model_name = "wd-v1-4-moat-tagger-v2"
 
     model_onnx_filename = load_file_from_url(
-        url=f'https://huggingface.co/lllyasviel/misc/resolve/main/{model_name}.onnx',
+        url=f"https://huggingface.co/lllyasviel/misc/resolve/main/{model_name}.onnx",
         model_dir=path_clip_vision,
-        file_name=f'{model_name}.onnx',
+        file_name=f"{model_name}.onnx",
     )
 
     model_csv_filename = load_file_from_url(
-        url=f'https://huggingface.co/lllyasviel/misc/resolve/main/{model_name}.csv',
+        url=f"https://huggingface.co/lllyasviel/misc/resolve/main/{model_name}.csv",
         model_dir=path_clip_vision,
-        file_name=f'{model_name}.csv',
+        file_name=f"{model_name}.csv",
     )
 
     if global_model is not None:
         model = global_model
     else:
-        model = InferenceSession(model_onnx_filename, providers=ort.get_available_providers())
+        model = InferenceSession(
+            model_onnx_filename, providers=ort.get_available_providers()
+        )
         global_model = model
 
     input = model.get_inputs()[0]
     height = input.shape[1]
 
     image = Image.fromarray(image_rgb)  # RGB
-    ratio = float(height)/max(image.size)
-    new_size = tuple([int(x*ratio) for x in image.size])
+    ratio = float(height) / max(image.size)
+    new_size = tuple([int(x * ratio) for x in image.size])
     image = image.resize(new_size, Image.LANCZOS)
     square = Image.new("RGB", (height, height), (255, 255, 255))
-    square.paste(image, ((height-new_size[0])//2, (height-new_size[1])//2))
+    square.paste(image, ((height - new_size[0]) // 2, (height - new_size[1]) // 2))
 
     image = np.array(square).astype(np.float32)
     image = image[:, :, ::-1]  # RGB -> BGR
@@ -87,12 +91,18 @@ def default_interrogator(image_rgb, threshold=0.35, character_threshold=0.85, ex
 
     result = list(zip(tags, probs[0]))
 
-    general = [item for item in result[general_index:character_index] if item[1] > threshold]
-    character = [item for item in result[character_index:] if item[1] > character_threshold]
+    general = [
+        item for item in result[general_index:character_index] if item[1] > threshold
+    ]
+    character = [
+        item for item in result[character_index:] if item[1] > character_threshold
+    ]
 
     all = character + general
     remove = [s.strip() for s in exclude_tags.lower().split(",")]
     all = [tag for tag in all if tag[0] not in remove]
 
-    res = ", ".join((item[0].replace("(", "\\(").replace(")", "\\)") for item in all)).replace('_', ' ')
+    res = ", ".join(
+        (item[0].replace("(", "\\(").replace(")", "\\)") for item in all)
+    ).replace("_", " ")
     return res

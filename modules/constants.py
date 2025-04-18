@@ -2,4 +2,4 @@
 MIN_SEED = 0
 MAX_SEED = 2**63 - 1
 
-AUTH_FILENAME = 'auth.json'
+AUTH_FILENAME = "auth.json"

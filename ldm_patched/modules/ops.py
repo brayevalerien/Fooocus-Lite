@@ -1,18 +1,26 @@
 import torch
 import ldm_patched.modules.model_management
 
+
 def cast_bias_weight(s, input):
     bias = None
-    non_blocking = ldm_patched.modules.model_management.device_supports_non_blocking(input.device)
+    non_blocking = ldm_patched.modules.model_management.device_supports_non_blocking(
+        input.device
+    )
     if s.bias is not None:
-        bias = s.bias.to(device=input.device, dtype=input.dtype, non_blocking=non_blocking)
-    weight = s.weight.to(device=input.device, dtype=input.dtype, non_blocking=non_blocking)
+        bias = s.bias.to(
+            device=input.device, dtype=input.dtype, non_blocking=non_blocking
+        )
+    weight = s.weight.to(
+        device=input.device, dtype=input.dtype, non_blocking=non_blocking
+    )
     return weight, bias
 
 
 class disable_weight_init:
     class Linear(torch.nn.Linear):
         ldm_patched_cast_weights = False
+
         def reset_parameters(self):
             return None
 
@@ -28,6 +36,7 @@ class disable_weight_init:
 
     class Conv2d(torch.nn.Conv2d):
         ldm_patched_cast_weights = False
+
         def reset_parameters(self):
             return None
 
@@ -43,6 +52,7 @@ class disable_weight_init:
 
     class Conv3d(torch.nn.Conv3d):
         ldm_patched_cast_weights = False
+
         def reset_parameters(self):
             return None
 
@@ -58,12 +68,15 @@ class disable_weight_init:
 
     class GroupNorm(torch.nn.GroupNorm):
         ldm_patched_cast_weights = False
+
         def reset_parameters(self):
             return None
 
         def forward_ldm_patched_cast_weights(self, input):
             weight, bias = cast_bias_weight(self, input)
-            return torch.nn.functional.group_norm(input, self.num_groups, weight, bias, self.eps)
+            return torch.nn.functional.group_norm(
+                input, self.num_groups, weight, bias, self.eps
+            )
 
         def forward(self, *args, **kwargs):
             if self.ldm_patched_cast_weights:
@@ -71,15 +84,17 @@ class disable_weight_init:
             else:
                 return super().forward(*args, **kwargs)
 
-
     class LayerNorm(torch.nn.LayerNorm):
         ldm_patched_cast_weights = False
+
         def reset_parameters(self):
             return None
 
         def forward_ldm_patched_cast_weights(self, input):
             weight, bias = cast_bias_weight(self, input)
-            return torch.nn.functional.layer_norm(input, self.normalized_shape, weight, bias, self.eps)
+            return torch.nn.functional.layer_norm(
+                input, self.normalized_shape, weight, bias, self.eps
+            )
 
         def forward(self, *args, **kwargs):
             if self.ldm_patched_cast_weights:

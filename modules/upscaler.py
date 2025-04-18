@@ -7,7 +7,7 @@ from ldm_patched.contrib.external_upscale_model import ImageUpscaleWithModel
 from collections import OrderedDict
 from modules.config import path_upscale_models
 
-model_filename = os.path.join(path_upscale_models, 'fooocus_upscaler_s409985e5.bin')
+model_filename = os.path.join(path_upscale_models, "fooocus_upscaler_s409985e5.bin")
 opImageUpscaleWithModel = ImageUpscaleWithModel()
 model = None
 
@@ -15,13 +15,13 @@ model = None
 def perform_upscale(img):
     global model
 
-    print(f'Upscaling image with shape {str(img.shape)} ...')
+    print(f"Upscaling image with shape {str(img.shape)} ...")
 
     if model is None:
         sd = torch.load(model_filename)
         sdo = OrderedDict()
         for k, v in sd.items():
-            sdo[k.replace('residual_block_', 'RDB')] = v
+            sdo[k.replace("residual_block_", "RDB")] = v
         del sd
         model = ESRGAN(sdo)
         model.cpu()

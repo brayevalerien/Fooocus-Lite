@@ -4,11 +4,11 @@ from typing import Optional
 
 
 def load_file_from_url(
-        url: str,
-        *,
-        model_dir: str,
-        progress: bool = True,
-        file_name: Optional[str] = None,
+    url: str,
+    *,
+    model_dir: str,
+    progress: bool = True,
+    file_name: Optional[str] = None,
 ) -> str:
     """Download a file from `url` into `model_dir`, using the file present if possible.
 
@@ -22,5 +22,6 @@ def load_file_from_url(
     if not os.path.exists(cached_file):
         print(f'Downloading: "{url}" to {cached_file}\n')
         from torch.hub import download_url_to_file
+
         download_url_to_file(url, cached_file, progress=progress)
     return cached_file

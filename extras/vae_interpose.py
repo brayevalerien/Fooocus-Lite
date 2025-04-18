@@ -35,7 +35,9 @@ class Interposer(nn.Module):
         self.hid = 128
 
         self.head_join = nn.ReLU()
-        self.head_short = nn.Conv2d(self.chan, self.hid, kernel_size=3, stride=1, padding=1)
+        self.head_short = nn.Conv2d(
+            self.chan, self.hid, kernel_size=3, stride=1, padding=1
+        )
         self.head_long = nn.Sequential(
             nn.Conv2d(self.chan, self.hid, kernel_size=3, stride=1, padding=1),
             nn.LeakyReLU(0.1),
@@ -50,20 +52,19 @@ class Interposer(nn.Module):
         )
         self.tail = nn.Sequential(
             nn.ReLU(),
-            nn.Conv2d(self.hid, self.chan, kernel_size=3, stride=1, padding=1)
+            nn.Conv2d(self.hid, self.chan, kernel_size=3, stride=1, padding=1),
         )
 
     def forward(self, x):
-        y = self.head_join(
-            self.head_long(x) +
-            self.head_short(x)
-        )
+        y = self.head_join(self.head_long(x) + self.head_short(x))
         z = self.core(y)
         return self.tail(z)
 
 
 vae_approx_model = None
-vae_approx_filename = os.path.join(path_vae_approx, 'xl-to-v1_interposer-v3.1.safetensors')
+vae_approx_filename = os.path.join(
+    path_vae_approx, "xl-to-v1_interposer-v3.1.safetensors"
+)
 
 
 def parse(x):
@@ -82,7 +83,7 @@ def parse(x):
         vae_approx_model = ModelPatcher(
             model=model,
             load_device=ldm_patched.modules.model_management.get_torch_device(),
-            offload_device=torch.device('cpu')
+            offload_device=torch.device("cpu"),
         )
         vae_approx_model.dtype = torch.float16 if fp16 else torch.float32
 

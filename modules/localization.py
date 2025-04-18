@@ -3,17 +3,17 @@ import os
 
 
 current_translation = {}
-localization_root = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'language')
+localization_root = os.path.join(os.path.dirname(os.path.dirname(__file__)), "language")
 
 
 def localization_js(filename):
     global current_translation
 
     if isinstance(filename, str):
-        full_name = os.path.abspath(os.path.join(localization_root, filename + '.json'))
+        full_name = os.path.abspath(os.path.join(localization_root, filename + ".json"))
         if os.path.exists(full_name):
             try:
-                with open(full_name, encoding='utf-8') as f:
+                with open(full_name, encoding="utf-8") as f:
                     current_translation = json.load(f)
                     assert isinstance(current_translation, dict)
                     for k, v in current_translation.items():
@@ -21,7 +21,7 @@ def localization_js(filename):
                         assert isinstance(v, str)
             except Exception as e:
                 print(str(e))
-                print(f'Failed to load localization file {full_name}')
+                print(f"Failed to load localization file {full_name}")
 
     # current_translation = {k: 'XXX' for k in current_translation.keys()}  # use this to see if all texts are covered
 
@@ -31,10 +31,10 @@ def localization_js(filename):
 def dump_english_config(components):
     all_texts = []
     for c in components:
-        label = getattr(c, 'label', None)
-        value = getattr(c, 'value', None)
-        choices = getattr(c, 'choices', None)
-        info = getattr(c, 'info', None)
+        label = getattr(c, "label", None)
+        value = getattr(c, "value", None)
+        choices = getattr(c, "choices", None)
+        info = getattr(c, "info", None)
 
         if isinstance(label, str):
             all_texts.append(label)
@@ -51,8 +51,8 @@ def dump_english_config(components):
                         if isinstance(y, str):
                             all_texts.append(y)
 
-    config_dict = {k: k for k in all_texts if k != "" and 'progress-container' not in k}
-    full_name = os.path.abspath(os.path.join(localization_root, 'en.json'))
+    config_dict = {k: k for k in all_texts if k != "" and "progress-container" not in k}
+    full_name = os.path.abspath(os.path.join(localization_root, "en.json"))
 
     with open(full_name, "w", encoding="utf-8") as json_file:
         json.dump(config_dict, json_file, indent=4)

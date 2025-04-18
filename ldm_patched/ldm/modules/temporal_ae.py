@@ -5,6 +5,7 @@ import torch
 from einops import rearrange, repeat
 
 import ldm_patched.modules.ops
+
 ops = ldm_patched.modules.ops.disable_weight_init
 
 from .diffusionmodules.model import (
@@ -14,6 +15,7 @@ from .diffusionmodules.model import (
 )
 from .diffusionmodules.openaimodel import ResBlock, timestep_embedding
 from .attention import BasicTransformerBlock
+
 
 def partialclass(cls, *args, **kwargs):
     class NewCls(cls):
@@ -187,7 +189,6 @@ class AttnVideoBlock(AttnBlock):
             raise NotImplementedError(f"unknown merge strategy {self.merge_strategy}")
 
 
-
 def make_time_attn(
     in_channels,
     attn_type="vanilla",
@@ -221,16 +222,25 @@ class VideoDecoder(Decoder):
         self.alpha = alpha
         self.merge_strategy = merge_strategy
         self.time_mode = time_mode
-        assert (
-            self.time_mode in self.available_time_modes
-        ), f"time_mode parameter has to be in {self.available_time_modes}"
+        assert self.time_mode in self.available_time_modes, (
+            f"time_mode parameter has to be in {self.available_time_modes}"
+        )
 
         if self.time_mode != "attn-only":
-            kwargs["conv_out_op"] = partialclass(AE3DConv, video_kernel_size=self.video_kernel_size)
+            kwargs["conv_out_op"] = partialclass(
+                AE3DConv, video_kernel_size=self.video_kernel_size
+            )
         if self.time_mode not in ["conv-only", "only-last-conv"]:
-            kwargs["attn_op"] = partialclass(make_time_attn, alpha=self.alpha, merge_strategy=self.merge_strategy)
+            kwargs["attn_op"] = partialclass(
+                make_time_attn, alpha=self.alpha, merge_strategy=self.merge_strategy
+            )
         if self.time_mode not in ["attn-only", "only-last-conv"]:
-            kwargs["resnet_op"] = partialclass(VideoResBlock, video_kernel_size=self.video_kernel_size, alpha=self.alpha, merge_strategy=self.merge_strategy)
+            kwargs["resnet_op"] = partialclass(
+                VideoResBlock,
+                video_kernel_size=self.video_kernel_size,
+                alpha=self.alpha,
+                merge_strategy=self.merge_strategy,
+            )
 
         super().__init__(*args, **kwargs)
 

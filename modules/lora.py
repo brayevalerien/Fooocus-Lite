@@ -4,7 +4,7 @@ def match_lora(lora, to_load):
     for x in to_load:
         real_load_key = to_load[x]
         if real_load_key in lora:
-            patch_dict[real_load_key] = ('fooocus', lora[real_load_key])
+            patch_dict[real_load_key] = ("fooocus", lora[real_load_key])
             loaded_keys.add(real_load_key)
             continue
 
@@ -29,7 +29,7 @@ def match_lora(lora, to_load):
             mid_name = None
         elif transformers_lora in lora.keys():
             A_name = transformers_lora
-            B_name ="{}.lora_linear_layer.down.weight".format(x)
+            B_name = "{}.lora_linear_layer.down.weight".format(x)
             mid_name = None
 
         if A_name is not None:
@@ -40,7 +40,6 @@ def match_lora(lora, to_load):
             patch_dict[to_load[x]] = ("lora", (lora[A_name], lora[B_name], alpha, mid))
             loaded_keys.add(A_name)
             loaded_keys.add(B_name)
-
 
         ######## loha
         hada_w1_a_name = "{}.hada_w1_a".format(x)
@@ -58,12 +57,22 @@ def match_lora(lora, to_load):
                 loaded_keys.add(hada_t1_name)
                 loaded_keys.add(hada_t2_name)
 
-            patch_dict[to_load[x]] = ("loha", (lora[hada_w1_a_name], lora[hada_w1_b_name], alpha, lora[hada_w2_a_name], lora[hada_w2_b_name], hada_t1, hada_t2))
+            patch_dict[to_load[x]] = (
+                "loha",
+                (
+                    lora[hada_w1_a_name],
+                    lora[hada_w1_b_name],
+                    alpha,
+                    lora[hada_w2_a_name],
+                    lora[hada_w2_b_name],
+                    hada_t1,
+                    hada_t2,
+                ),
+            )
             loaded_keys.add(hada_w1_a_name)
             loaded_keys.add(hada_w1_b_name)
             loaded_keys.add(hada_w2_a_name)
             loaded_keys.add(hada_w2_b_name)
-
 
         ######## lokr
         lokr_w1_name = "{}.lokr_w1".format(x)
@@ -109,16 +118,36 @@ def match_lora(lora, to_load):
             lokr_t2 = lora[lokr_t2_name]
             loaded_keys.add(lokr_t2_name)
 
-        if (lokr_w1 is not None) or (lokr_w2 is not None) or (lokr_w1_a is not None) or (lokr_w2_a is not None):
-            patch_dict[to_load[x]] = ("lokr", (lokr_w1, lokr_w2, alpha, lokr_w1_a, lokr_w1_b, lokr_w2_a, lokr_w2_b, lokr_t2))
+        if (
+            (lokr_w1 is not None)
+            or (lokr_w2 is not None)
+            or (lokr_w1_a is not None)
+            or (lokr_w2_a is not None)
+        ):
+            patch_dict[to_load[x]] = (
+                "lokr",
+                (
+                    lokr_w1,
+                    lokr_w2,
+                    alpha,
+                    lokr_w1_a,
+                    lokr_w1_b,
+                    lokr_w2_a,
+                    lokr_w2_b,
+                    lokr_t2,
+                ),
+            )
 
-        #glora
+        # glora
         a1_name = "{}.a1.weight".format(x)
         a2_name = "{}.a2.weight".format(x)
         b1_name = "{}.b1.weight".format(x)
         b2_name = "{}.b2.weight".format(x)
         if a1_name in lora:
-            patch_dict[to_load[x]] = ("glora", (lora[a1_name], lora[a2_name], lora[b1_name], lora[b2_name], alpha))
+            patch_dict[to_load[x]] = (
+                "glora",
+                (lora[a1_name], lora[a2_name], lora[b1_name], lora[b2_name], alpha),
+            )
             loaded_keys.add(a1_name)
             loaded_keys.add(a2_name)
             loaded_keys.add(b1_name)
@@ -134,7 +163,10 @@ def match_lora(lora, to_load):
             patch_dict[to_load[x]] = ("diff", (w_norm,))
             if b_norm is not None:
                 loaded_keys.add(b_norm_name)
-                patch_dict["{}.bias".format(to_load[x][:-len(".weight")])] = ("diff", (b_norm,))
+                patch_dict["{}.bias".format(to_load[x][: -len(".weight")])] = (
+                    "diff",
+                    (b_norm,),
+                )
 
         diff_name = "{}.diff".format(x)
         diff_weight = lora.get(diff_name, None)
@@ -145,7 +177,10 @@ def match_lora(lora, to_load):
         diff_bias_name = "{}.diff_b".format(x)
         diff_bias = lora.get(diff_bias_name, None)
         if diff_bias is not None:
-            patch_dict["{}.bias".format(to_load[x][:-len(".weight")])] = ("diff", (diff_bias,))
+            patch_dict["{}.bias".format(to_load[x][: -len(".weight")])] = (
+                "diff",
+                (diff_bias,),
+            )
             loaded_keys.add(diff_bias_name)
 
     remaining_dict = {x: y for x, y in lora.items() if x not in loaded_keys}

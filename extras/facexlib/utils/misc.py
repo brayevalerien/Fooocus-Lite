@@ -42,8 +42,8 @@ def img2tensor(imgs, bgr2rgb=True, float32=True):
 
     def _totensor(img, bgr2rgb, float32):
         if img.shape[2] == 3 and bgr2rgb:
-            if img.dtype == 'float64':
-                img = img.astype('float32')
+            if img.dtype == "float64":
+                img = img.astype("float32")
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img = torch.from_numpy(img.transpose(2, 0, 1))
         if float32:
@@ -56,12 +56,13 @@ def img2tensor(imgs, bgr2rgb=True, float32=True):
         return _totensor(imgs, bgr2rgb, float32)
 
 
-def load_file_from_url(url, model_dir=None, progress=True, file_name=None, save_dir=None):
-    """Ref:https://github.com/1adrianb/face-alignment/blob/master/face_alignment/utils.py
-    """
+def load_file_from_url(
+    url, model_dir=None, progress=True, file_name=None, save_dir=None
+):
+    """Ref:https://github.com/1adrianb/face-alignment/blob/master/face_alignment/utils.py"""
     if model_dir is None:
         hub_dir = get_dir()
-        model_dir = os.path.join(hub_dir, 'checkpoints')
+        model_dir = os.path.join(hub_dir, "checkpoints")
 
     if save_dir is None:
         save_dir = os.path.join(ROOT_DIR, model_dir)
@@ -99,7 +100,7 @@ def scandir(dir_path, suffix=None, recursive=False, full_path=False):
 
     def _scandir(dir_path, suffix, recursive):
         for entry in os.scandir(dir_path):
-            if not entry.name.startswith('.') and entry.is_file():
+            if not entry.name.startswith(".") and entry.is_file():
                 if full_path:
                     return_path = entry.path
                 else:

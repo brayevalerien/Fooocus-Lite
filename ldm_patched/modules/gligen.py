@@ -9,7 +9,7 @@ def exists(val):
 
 
 def uniq(arr):
-    return{el: True for el in arr}.keys()
+    return {el: True for el in arr}.keys()
 
 
 def default(val, d):
@@ -30,19 +30,18 @@ class GEGLU(nn.Module):
 
 
 class FeedForward(nn.Module):
-    def __init__(self, dim, dim_out=None, mult=4, glu=False, dropout=0.):
+    def __init__(self, dim, dim_out=None, mult=4, glu=False, dropout=0.0):
         super().__init__()
         inner_dim = int(dim * mult)
         dim_out = default(dim_out, dim)
-        project_in = nn.Sequential(
-            nn.Linear(dim, inner_dim),
-            nn.GELU()
-        ) if not glu else GEGLU(dim, inner_dim)
+        project_in = (
+            nn.Sequential(nn.Linear(dim, inner_dim), nn.GELU())
+            if not glu
+            else GEGLU(dim, inner_dim)
+        )
 
         self.net = nn.Sequential(
-            project_in,
-            nn.Dropout(dropout),
-            nn.Linear(inner_dim, dim_out)
+            project_in, nn.Dropout(dropout), nn.Linear(inner_dim, dim_out)
         )
 
     def forward(self, x):
@@ -54,17 +53,15 @@ class GatedCrossAttentionDense(nn.Module):
         super().__init__()
 
         self.attn = CrossAttention(
-            query_dim=query_dim,
-            context_dim=context_dim,
-            heads=n_heads,
-            dim_head=d_head)
+            query_dim=query_dim, context_dim=context_dim, heads=n_heads, dim_head=d_head
+        )
         self.ff = FeedForward(query_dim, glu=True)
 
         self.norm1 = nn.LayerNorm(query_dim)
         self.norm2 = nn.LayerNorm(query_dim)
 
-        self.register_parameter('alpha_attn', nn.Parameter(torch.tensor(0.)))
-        self.register_parameter('alpha_dense', nn.Parameter(torch.tensor(0.)))
+        self.register_parameter("alpha_attn", nn.Parameter(torch.tensor(0.0)))
+        self.register_parameter("alpha_dense", nn.Parameter(torch.tensor(0.0)))
 
         # this can be useful: we can externally change magnitude of tanh(alpha)
         # for example, when it is set to 0, then the entire model is same as
@@ -72,11 +69,10 @@ class GatedCrossAttentionDense(nn.Module):
         self.scale = 1
 
     def forward(self, x, objs):
-
-        x = x + self.scale * \
-            torch.tanh(self.alpha_attn) * self.attn(self.norm1(x), objs, objs)
-        x = x + self.scale * \
-            torch.tanh(self.alpha_dense) * self.ff(self.norm2(x))
+        x = x + self.scale * torch.tanh(self.alpha_attn) * self.attn(
+            self.norm1(x), objs, objs
+        )
+        x = x + self.scale * torch.tanh(self.alpha_dense) * self.ff(self.norm2(x))
 
         return x
 
@@ -90,17 +86,15 @@ class GatedSelfAttentionDense(nn.Module):
         self.linear = nn.Linear(context_dim, query_dim)
 
         self.attn = CrossAttention(
-            query_dim=query_dim,
-            context_dim=query_dim,
-            heads=n_heads,
-            dim_head=d_head)
+            query_dim=query_dim, context_dim=query_dim, heads=n_heads, dim_head=d_head
+        )
         self.ff = FeedForward(query_dim, glu=True)
 
         self.norm1 = nn.LayerNorm(query_dim)
         self.norm2 = nn.LayerNorm(query_dim)
 
-        self.register_parameter('alpha_attn', nn.Parameter(torch.tensor(0.)))
-        self.register_parameter('alpha_dense', nn.Parameter(torch.tensor(0.)))
+        self.register_parameter("alpha_attn", nn.Parameter(torch.tensor(0.0)))
+        self.register_parameter("alpha_dense", nn.Parameter(torch.tensor(0.0)))
 
         # this can be useful: we can externally change magnitude of tanh(alpha)
         # for example, when it is set to 0, then the entire model is same as
@@ -108,14 +102,16 @@ class GatedSelfAttentionDense(nn.Module):
         self.scale = 1
 
     def forward(self, x, objs):
-
         N_visual = x.shape[1]
         objs = self.linear(objs)
 
-        x = x + self.scale * torch.tanh(self.alpha_attn) * self.attn(
-            self.norm1(torch.cat([x, objs], dim=1)))[:, 0:N_visual, :]
-        x = x + self.scale * \
-            torch.tanh(self.alpha_dense) * self.ff(self.norm2(x))
+        x = (
+            x
+            + self.scale
+            * torch.tanh(self.alpha_attn)
+            * self.attn(self.norm1(torch.cat([x, objs], dim=1)))[:, 0:N_visual, :]
+        )
+        x = x + self.scale * torch.tanh(self.alpha_dense) * self.ff(self.norm2(x))
 
         return x
 
@@ -129,14 +125,15 @@ class GatedSelfAttentionDense2(nn.Module):
         self.linear = nn.Linear(context_dim, query_dim)
 
         self.attn = CrossAttention(
-            query_dim=query_dim, context_dim=query_dim, dim_head=d_head)
+            query_dim=query_dim, context_dim=query_dim, dim_head=d_head
+        )
         self.ff = FeedForward(query_dim, glu=True)
 
         self.norm1 = nn.LayerNorm(query_dim)
         self.norm2 = nn.LayerNorm(query_dim)
 
-        self.register_parameter('alpha_attn', nn.Parameter(torch.tensor(0.)))
-        self.register_parameter('alpha_dense', nn.Parameter(torch.tensor(0.)))
+        self.register_parameter("alpha_attn", nn.Parameter(torch.tensor(0.0)))
+        self.register_parameter("alpha_dense", nn.Parameter(torch.tensor(0.0)))
 
         # this can be useful: we can externally change magnitude of tanh(alpha)
         # for example, when it is set to 0, then the entire model is same as
@@ -144,7 +141,6 @@ class GatedSelfAttentionDense2(nn.Module):
         self.scale = 1
 
     def forward(self, x, objs):
-
         B, N_visual, _ = x.shape
         B, N_ground, _ = objs.shape
 
@@ -159,24 +155,20 @@ class GatedSelfAttentionDense2(nn.Module):
         size_g = int(size_g)
 
         # select grounding token and resize it to visual token size as residual
-        out = self.attn(self.norm1(torch.cat([x, objs], dim=1)))[
-            :, N_visual:, :]
+        out = self.attn(self.norm1(torch.cat([x, objs], dim=1)))[:, N_visual:, :]
         out = out.permute(0, 2, 1).reshape(B, -1, size_g, size_g)
-        out = torch.nn.functional.interpolate(
-            out, (size_v, size_v), mode='bicubic')
+        out = torch.nn.functional.interpolate(out, (size_v, size_v), mode="bicubic")
         residual = out.reshape(B, -1, N_visual).permute(0, 2, 1)
 
         # add residual to visual feature
         x = x + self.scale * torch.tanh(self.alpha_attn) * residual
-        x = x + self.scale * \
-            torch.tanh(self.alpha_dense) * self.ff(self.norm2(x))
+        x = x + self.scale * torch.tanh(self.alpha_dense) * self.ff(self.norm2(x))
 
         return x
 
 
-class FourierEmbedder():
+class FourierEmbedder:
     def __init__(self, num_freqs=64, temperature=100):
-
         self.num_freqs = num_freqs
         self.temperature = temperature
         self.freq_bands = temperature ** (torch.arange(num_freqs) / num_freqs)
@@ -208,10 +200,10 @@ class PositionNet(nn.Module):
             nn.Linear(512, out_dim),
         )
 
-        self.null_positive_feature = torch.nn.Parameter(
-            torch.zeros([self.in_dim]))
+        self.null_positive_feature = torch.nn.Parameter(torch.zeros([self.in_dim]))
         self.null_position_feature = torch.nn.Parameter(
-            torch.zeros([self.position_dim]))
+            torch.zeros([self.position_dim])
+        )
 
     def forward(self, boxes, masks, positive_embeddings):
         B, N, _ = boxes.shape
@@ -227,12 +219,10 @@ class PositionNet(nn.Module):
         xyxy_null = self.null_position_feature.view(1, 1, -1)
 
         # replace padding with learnable null embedding
-        positive_embeddings = positive_embeddings * \
-            masks + (1 - masks) * positive_null
+        positive_embeddings = positive_embeddings * masks + (1 - masks) * positive_null
         xyxy_embedding = xyxy_embedding * masks + (1 - masks) * xyxy_null
 
-        objs = self.linears(
-            torch.cat([positive_embeddings, xyxy_embedding], dim=-1))
+        objs = self.linears(torch.cat([positive_embeddings, xyxy_embedding], dim=-1))
         assert objs.shape == torch.Size([B, N, self.out_dim])
         return objs
 
@@ -248,10 +238,12 @@ class Gligen(nn.Module):
 
     def _set_position(self, boxes, masks, positive_embeddings):
         objs = self.position_net(boxes, masks, positive_embeddings)
+
         def func(x, extra_options):
             key = extra_options["transformer_index"]
             module = self.module_list[key]
             return module(x, objs)
+
         return func
 
     def set_position(self, latent_image_shape, position_params, device):
@@ -270,32 +262,32 @@ class Gligen(nn.Module):
         append_boxes = []
         append_conds = []
         if len(boxes) < self.max_objs:
-            append_boxes = [torch.zeros(
-                [self.max_objs - len(boxes), 4], device="cpu")]
-            append_conds = [torch.zeros(
-                [self.max_objs - len(boxes), self.key_dim], device="cpu")]
+            append_boxes = [torch.zeros([self.max_objs - len(boxes), 4], device="cpu")]
+            append_conds = [
+                torch.zeros([self.max_objs - len(boxes), self.key_dim], device="cpu")
+            ]
 
-        box_out = torch.cat(
-            boxes + append_boxes).unsqueeze(0).repeat(batch, 1, 1)
+        box_out = torch.cat(boxes + append_boxes).unsqueeze(0).repeat(batch, 1, 1)
         masks = masks.unsqueeze(0).repeat(batch, 1)
-        conds = torch.cat(positive_embeddings +
-                          append_conds).unsqueeze(0).repeat(batch, 1, 1)
+        conds = (
+            torch.cat(positive_embeddings + append_conds)
+            .unsqueeze(0)
+            .repeat(batch, 1, 1)
+        )
         return self._set_position(
-            box_out.to(device),
-            masks.to(device),
-            conds.to(device))
+            box_out.to(device), masks.to(device), conds.to(device)
+        )
 
     def set_empty(self, latent_image_shape, device):
         batch, c, h, w = latent_image_shape
         masks = torch.zeros([self.max_objs], device="cpu").repeat(batch, 1)
-        box_out = torch.zeros([self.max_objs, 4],
-                              device="cpu").repeat(batch, 1, 1)
-        conds = torch.zeros([self.max_objs, self.key_dim],
-                            device="cpu").repeat(batch, 1, 1)
+        box_out = torch.zeros([self.max_objs, 4], device="cpu").repeat(batch, 1, 1)
+        conds = torch.zeros([self.max_objs, self.key_dim], device="cpu").repeat(
+            batch, 1, 1
+        )
         return self._set_position(
-            box_out.to(device),
-            masks.to(device),
-            conds.to(device))
+            box_out.to(device), masks.to(device), conds.to(device)
+        )
 
 
 def load_gligen(sd):
@@ -304,8 +296,9 @@ def load_gligen(sd):
     key_dim = 768
     for a in ["input_blocks", "middle_block", "output_blocks"]:
         for b in range(20):
-            k_temp = filter(lambda k: "{}.{}.".format(a, b)
-                            in k and ".fuser." in k, sd_k)
+            k_temp = filter(
+                lambda k: "{}.{}.".format(a, b) in k and ".fuser." in k, sd_k
+            )
             k_temp = map(lambda k: (k, k.split(".fuser.")[-1]), k_temp)
 
             n_sd = {}
@@ -322,8 +315,7 @@ def load_gligen(sd):
                     d_head = 64
                     n_heads = query_dim // d_head
 
-                gated = GatedSelfAttentionDense(
-                    query_dim, key_dim, n_heads, d_head)
+                gated = GatedSelfAttentionDense(query_dim, key_dim, n_heads, d_head)
                 gated.load_state_dict(n_sd, strict=False)
                 output_list.append(gated)
 
@@ -333,6 +325,7 @@ def load_gligen(sd):
 
         class WeightsLoader(torch.nn.Module):
             pass
+
         w = WeightsLoader()
         w.position_net = PositionNet(in_dim, out_dim)
         w.load_state_dict(sd, strict=False)

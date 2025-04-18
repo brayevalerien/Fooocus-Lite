@@ -4,11 +4,12 @@ import torch.nn.functional as F
 
 def conv3x3(in_planes, out_planes, stride=1):
     """3x3 convolution with padding"""
-    return nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=stride, padding=1, bias=False)
+    return nn.Conv2d(
+        in_planes, out_planes, kernel_size=3, stride=stride, padding=1, bias=False
+    )
 
 
 class BasicBlock(nn.Module):
-
     def __init__(self, in_chan, out_chan, stride=1):
         super(BasicBlock, self).__init__()
         self.conv1 = conv3x3(in_chan, out_chan, stride)
@@ -46,7 +47,6 @@ def create_layer_basic(in_chan, out_chan, bnum, stride=1):
 
 
 class ResNet18(nn.Module):
-
     def __init__(self):
         super(ResNet18, self).__init__()
         self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3, bias=False)

@@ -2,10 +2,12 @@ import argparse
 import enum
 import ldm_patched.modules.options
 
+
 class EnumAction(argparse.Action):
     """
     Argparse action for handling Enums
     """
+
     def __init__(self, **kwargs):
         # Pop off the type value
         enum_type = kwargs.pop("type", None)
@@ -33,12 +35,28 @@ class EnumAction(argparse.Action):
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument("--listen", type=str, default="127.0.0.1", metavar="IP", nargs="?", const="0.0.0.0")
+parser.add_argument(
+    "--listen", type=str, default="127.0.0.1", metavar="IP", nargs="?", const="0.0.0.0"
+)
 parser.add_argument("--port", type=int, default=8188)
-parser.add_argument("--disable-header-check", type=str, default=None, metavar="ORIGIN", nargs="?", const="*")
+parser.add_argument(
+    "--disable-header-check",
+    type=str,
+    default=None,
+    metavar="ORIGIN",
+    nargs="?",
+    const="*",
+)
 parser.add_argument("--web-upload-size", type=float, default=100)
 
-parser.add_argument("--external-working-path", type=str, default=None, metavar="PATH", nargs='+', action='append')
+parser.add_argument(
+    "--external-working-path",
+    type=str,
+    default=None,
+    metavar="PATH",
+    nargs="+",
+    action="append",
+)
 parser.add_argument("--output-path", type=str, default=None)
 parser.add_argument("--temp-path", type=str, default=None)
 parser.add_argument("--cache-path", type=str, default=None)
@@ -75,9 +93,12 @@ fpte_group.add_argument("--clip-in-fp16", action="store_true")
 fpte_group.add_argument("--clip-in-fp32", action="store_true")
 
 
-parser.add_argument("--directml", type=int, nargs="?", metavar="DIRECTML_DEVICE", const=-1)
+parser.add_argument(
+    "--directml", type=int, nargs="?", metavar="DIRECTML_DEVICE", const=-1
+)
 
 parser.add_argument("--disable-ipex-hijack", action="store_true")
+
 
 class LatentPreviewMethod(enum.Enum):
     NoPreviews = "none"
@@ -85,7 +106,13 @@ class LatentPreviewMethod(enum.Enum):
     Latent2RGB = "fast"
     TAESD = "taesd"
 
-parser.add_argument("--preview-option", type=LatentPreviewMethod, default=LatentPreviewMethod.NoPreviews, action=EnumAction)
+
+parser.add_argument(
+    "--preview-option",
+    type=LatentPreviewMethod,
+    default=LatentPreviewMethod.NoPreviews,
+    action=EnumAction,
+)
 
 attn_group = parser.add_mutually_exclusive_group()
 attn_group.add_argument("--attention-split", action="store_true")
@@ -100,7 +127,9 @@ vram_group.add_argument("--always-high-vram", action="store_true")
 vram_group.add_argument("--always-normal-vram", action="store_true")
 vram_group.add_argument("--always-low-vram", action="store_true")
 vram_group.add_argument("--always-no-vram", action="store_true")
-vram_group.add_argument("--always-cpu", type=int, nargs="?", metavar="CPU_NUM_THREADS", const=-1)
+vram_group.add_argument(
+    "--always-cpu", type=int, nargs="?", metavar="CPU_NUM_THREADS", const=-1
+)
 
 parser.add_argument("--always-offload-from-vram", action="store_true")
 parser.add_argument("--pytorch-deterministic", action="store_true")

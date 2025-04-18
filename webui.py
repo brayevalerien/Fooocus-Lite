@@ -40,13 +40,14 @@ def generate_clicked(task):
     execution_start_time = time.perf_counter()
     finished = False
 
-    yield gr.update(
-        visible=True,
-        value=modules.html.make_progress_html(1, "Waiting for task to start ..."),
-    ), gr.update(visible=True, value=None), gr.update(
-        visible=False, value=None
-    ), gr.update(
-        visible=False
+    yield (
+        gr.update(
+            visible=True,
+            value=modules.html.make_progress_html(1, "Waiting for task to start ..."),
+        ),
+        gr.update(visible=True, value=None),
+        gr.update(visible=False, value=None),
+        gr.update(visible=False),
     )
 
     worker.async_tasks.append(task)
@@ -56,7 +57,6 @@ def generate_clicked(task):
         if len(task.yields) > 0:
             flag, product = task.yields.pop(0)
             if flag == "preview":
-
                 # help bad internet connection by skipping duplicated preview
                 if len(task.yields) > 0:  # if we have the next item
                     # if the next item is also a preview
@@ -65,24 +65,33 @@ def generate_clicked(task):
                         continue
 
                 percentage, title, image = product
-                yield gr.update(
-                    visible=True,
-                    value=modules.html.make_progress_html(percentage, title),
-                ), (
-                    gr.update(visible=True, value=image)
-                    if image is not None
-                    else gr.update()
-                ), gr.update(), gr.update(
-                    visible=False
+                yield (
+                    gr.update(
+                        visible=True,
+                        value=modules.html.make_progress_html(percentage, title),
+                    ),
+                    (
+                        gr.update(visible=True, value=image)
+                        if image is not None
+                        else gr.update()
+                    ),
+                    gr.update(),
+                    gr.update(visible=False),
                 )
             if flag == "results":
-                yield gr.update(visible=True), gr.update(visible=True), gr.update(
-                    visible=True, value=product
-                ), gr.update(visible=False)
+                yield (
+                    gr.update(visible=True),
+                    gr.update(visible=True),
+                    gr.update(visible=True, value=product),
+                    gr.update(visible=False),
+                )
             if flag == "finish":
-                yield gr.update(visible=False), gr.update(visible=False), gr.update(
-                    visible=False
-                ), gr.update(visible=True, value=product)
+                yield (
+                    gr.update(visible=False),
+                    gr.update(visible=False),
+                    gr.update(visible=False),
+                    gr.update(visible=True, value=product),
+                )
                 finished = True
 
                 # delete Fooocus temp images, only keep gradio temp images
@@ -609,7 +618,6 @@ with shared.gradio_root:
             image_seed = gr.Textbox(label="Seed", value=0, max_lines=1, visible=False)
 
             def random_checked(r):
-
                 return gr.update(visible=not r)
 
             def refresh_seed(r, seed_string):
@@ -1408,9 +1416,7 @@ with shared.gradio_root:
             ],
         ).then(
             fn=refresh_seed, inputs=[seed_random, image_seed], outputs=image_seed
-        ).then(
-            fn=get_task, inputs=ctrls, outputs=currentTask
-        ).then(
+        ).then(fn=get_task, inputs=ctrls, outputs=currentTask).then(
             fn=generate_clicked,
             inputs=currentTask,
             outputs=[progress_html, progress_window, progress_gallery, gallery],
@@ -1422,13 +1428,9 @@ with shared.gradio_root:
                 False,
             ),
             outputs=[generate_button, stop_button, skip_button, state_is_generating],
-        ).then(
-            fn=update_history_link, outputs=history_link
-        ).then(
+        ).then(fn=update_history_link, outputs=history_link).then(
             fn=lambda: None, _js="playNotification"
-        ).then(
-            fn=lambda: None, _js="refresh_grid_delayed"
-        )
+        ).then(fn=lambda: None, _js="refresh_grid_delayed")
 
         for notification_file in ["notification.ogg", "notification.mp3"]:
             if os.path.exists(notification_file):

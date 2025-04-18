@@ -15,7 +15,10 @@ def centered_canny_color(x: np.ndarray, canny_low_threshold, canny_high_threshol
     assert isinstance(x, np.ndarray)
     assert x.ndim == 3 and x.shape[2] == 3
 
-    result = [centered_canny(x[..., i], canny_low_threshold, canny_high_threshold) for i in range(3)]
+    result = [
+        centered_canny(x[..., i], canny_low_threshold, canny_high_threshold)
+        for i in range(3)
+    ]
     result = np.stack(result, axis=2)
     return result
 
@@ -34,7 +37,9 @@ def pyramid_canny_color(x: np.ndarray, canny_low_threshold, canny_high_threshold
         if acc_edge is None:
             acc_edge = edge
         else:
-            acc_edge = cv2.resize(acc_edge, (edge.shape[1], edge.shape[0]), interpolation=cv2.INTER_LINEAR)
+            acc_edge = cv2.resize(
+                acc_edge, (edge.shape[1], edge.shape[0]), interpolation=cv2.INTER_LINEAR
+            )
             acc_edge = acc_edge * 0.75 + edge * 0.25
 
     return acc_edge

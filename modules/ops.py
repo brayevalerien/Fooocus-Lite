@@ -4,7 +4,7 @@ import contextlib
 
 @contextlib.contextmanager
 def use_patched_ops(operations):
-    op_names = ['Linear', 'Conv2d', 'Conv3d', 'GroupNorm', 'LayerNorm']
+    op_names = ["Linear", "Conv2d", "Conv3d", "GroupNorm", "LayerNorm"]
     backups = {op_name: getattr(torch.nn, op_name) for op_name in op_names}
 
     try:
